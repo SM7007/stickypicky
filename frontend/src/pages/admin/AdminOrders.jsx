@@ -95,15 +95,15 @@ const AdminOrders = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-surface text-secondary hover:text-white border border-border rounded px-3 py-2 text-xs focus:outline-none focus:border-white w-full sm:w-auto"
+            className="bg-surface text-secondary hover:text-white border border-border rounded px-3 py-2 text-xs focus:outline-none focus:border-white w-full sm:w-auto cursor-pointer"
           >
-            <option value="">All Statuses</option>
-            <option value="PENDING">Pending</option>
-            <option value="CONFIRMED">Confirmed</option>
-            <option value="PROCESSING">Processing</option>
-            <option value="SHIPPED">Shipped</option>
-            <option value="DELIVERED">Delivered</option>
-            <option value="CANCELLED">Cancelled</option>
+            <option value="" className="bg-[#111111] text-white">All Statuses</option>
+            <option value="PENDING" className="bg-[#111111] text-white">Pending</option>
+            <option value="CONFIRMED" className="bg-[#111111] text-white">Confirmed</option>
+            <option value="PROCESSING" className="bg-[#111111] text-white">Processing</option>
+            <option value="SHIPPED" className="bg-[#111111] text-white">Shipped</option>
+            <option value="DELIVERED" className="bg-[#111111] text-white">Delivered</option>
+            <option value="CANCELLED" className="bg-[#111111] text-white">Cancelled</option>
           </select>
         </div>
 
@@ -173,14 +173,14 @@ const AdminOrders = () => {
                       <select
                         value={order.orderStatus}
                         onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                        className="bg-background text-secondary hover:text-white border border-border rounded px-2 py-1 focus:outline-none focus:border-white"
+                        className="bg-background text-secondary hover:text-white border border-border rounded px-2 py-1 focus:outline-none focus:border-white cursor-pointer"
                       >
-                        <option value="PENDING">Pending</option>
-                        <option value="CONFIRMED">Confirmed</option>
-                        <option value="PROCESSING">Processing</option>
-                        <option value="SHIPPED">Shipped</option>
-                        <option value="DELIVERED">Delivered</option>
-                        <option value="CANCELLED">Cancelled</option>
+                        <option value="PENDING" className="bg-[#0a0a0a] text-white">Pending</option>
+                        <option value="CONFIRMED" className="bg-[#0a0a0a] text-white">Confirmed</option>
+                        <option value="PROCESSING" className="bg-[#0a0a0a] text-white">Processing</option>
+                        <option value="SHIPPED" className="bg-[#0a0a0a] text-white">Shipped</option>
+                        <option value="DELIVERED" className="bg-[#0a0a0a] text-white">Delivered</option>
+                        <option value="CANCELLED" className="bg-[#0a0a0a] text-white">Cancelled</option>
                       </select>
                     </td>
 
@@ -248,17 +248,17 @@ const AdminOrders = () => {
             <div className="flex justify-between items-center gap-4 text-xs">
               <div>
                 <span className="text-secondary block mb-1">Update Shipment status:</span>
-                <select
+                 <select
                   value={selectedOrder.orderStatus}
                   onChange={(e) => handleStatusChange(selectedOrder.id, e.target.value)}
-                  className="bg-background text-white border border-border rounded px-3 py-1.5 focus:outline-none"
+                  className="bg-background text-white border border-border rounded px-3 py-1.5 focus:outline-none cursor-pointer"
                 >
-                  <option value="PENDING">Pending</option>
-                  <option value="CONFIRMED">Confirmed</option>
-                  <option value="PROCESSING">Processing</option>
-                  <option value="SHIPPED">Shipped</option>
-                  <option value="DELIVERED">Delivered</option>
-                  <option value="CANCELLED">Cancelled</option>
+                  <option value="PENDING" className="bg-[#0a0a0a] text-white">Pending</option>
+                  <option value="CONFIRMED" className="bg-[#0a0a0a] text-white">Confirmed</option>
+                  <option value="PROCESSING" className="bg-[#0a0a0a] text-white">Processing</option>
+                  <option value="SHIPPED" className="bg-[#0a0a0a] text-white">Shipped</option>
+                  <option value="DELIVERED" className="bg-[#0a0a0a] text-white">Delivered</option>
+                  <option value="CANCELLED" className="bg-[#0a0a0a] text-white">Cancelled</option>
                 </select>
               </div>
               <div className="text-right">

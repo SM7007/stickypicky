@@ -99,12 +99,12 @@ const Shop = () => {
               <select
                 value={sortParam}
                 onChange={(e) => updateFilters('sort', e.target.value)}
-                className="bg-surface text-secondary hover:text-white border border-border rounded px-3 py-2 text-sm focus:outline-none focus:border-white"
+                className="bg-surface text-secondary hover:text-white border border-border rounded px-3 py-2 text-sm focus:outline-none focus:border-white cursor-pointer"
               >
-                <option value="featured">Featured</option>
-                <option value="newest">Newest</option>
-                <option value="price_asc">Price: Low to High</option>
-                <option value="price_desc">Price: High to Low</option>
+                <option value="featured" className="bg-[#111111] text-white">Featured</option>
+                <option value="newest" className="bg-[#111111] text-white">Newest</option>
+                <option value="price_asc" className="bg-[#111111] text-white">Price: Low to High</option>
+                <option value="price_desc" className="bg-[#111111] text-white">Price: High to Low</option>
               </select>
             </div>
           </div>

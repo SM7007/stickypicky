@@ -166,10 +166,10 @@ const AdminEditProduct = () => {
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
                   required
-                  className="w-full bg-background text-white border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-white"
+                  className="w-full bg-background text-white border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-white cursor-pointer"
                 >
                   {categories.map(c => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
+                    <option key={c.id} value={c.id} className="bg-[#0a0a0a] text-white">{c.name}</option>
                   ))}
                 </select>
               </div>
