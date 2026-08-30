@@ -1,0 +1,146 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  phone     String?
+  role      Role     @default(CUSTOMER)
+  orders    Order[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+
+  @@index([slug])
+}
+
+model Product {
+  id            String        @id @default(cuid())
+  name          String
+  slug          String        @unique
+  description   String
+  price         Float
+  originalPrice Float?
+  stock         Int           @default(0)
+  image         String
+  cloudinaryId  String?
+  category      Category      @relation(fields: [categoryId], references: [id])
+  categoryId    String
+  sizes         ProductSize[]
+  featured      Boolean       @default(false)
+  active        Boolean       @default(true)
+  orderItems    OrderItem[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([slug])
+  @@index([categoryId])
+  @@index([featured])
+  @@index([active])
+}
+
+model ProductSize {
+  id        String  @id @default(cuid())
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  size      String
+  price     Float
+  stock     Int     @default(0)
+
+  @@unique([productId, size])
+  @@index([productId])
+}
+
+model Order {
+  id             String        @id @default(cuid())
+  user           User?         @relation(fields: [userId], references: [id])
+  userId         String?
+  items          OrderItem[]
+  payment        Payment?
+  totalAmount    Float
+  deliveryCharge Float         @default(0)
+  paymentStatus  PaymentStatus @default(PENDING)
+  orderStatus    OrderStatus   @default(PENDING)
+  customerName   String
+  email          String
+  phone          String
+  address        String
+  city           String
+  state          String
+  pincode        String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([paymentStatus])
+  @@index([orderStatus])
+}
+
+model OrderItem {
+  id           String  @id @default(cuid())
+  order        Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId      String
+  product      Product @relation(fields: [productId], references: [id])
+  productId    String
+  productName  String
+  selectedSize String?
+  quantity     Int
+  price        Float
+
+  @@index([orderId])
+}
+
+model Payment {
+  id                 String        @id @default(cuid())
+  order              Order         @relation(fields: [orderId], references: [id])
+  orderId            String        @unique
+  razorpayOrderId    String        @unique
+  razorpayPaymentId  String?
+  razorpaySignature  String?
+  amount             Float
+  status             PaymentStatus @default(PENDING)
+  createdAt          DateTime      @default(now())
+
+  @@index([razorpayOrderId])
+}
