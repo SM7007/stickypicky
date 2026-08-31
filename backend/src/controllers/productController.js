@@ -117,8 +117,17 @@ const createProduct = async (req, res, next) => {
     const existing = await prisma.product.findUnique({ where: { slug } });
     if (existing) return next(createError('A product with this name already exists', 400));
 
-    const image = req.file ? req.file.path : '';
-    const cloudinaryId = req.file ? req.file.filename : null;
+    let image = '';
+    let cloudinaryId = null;
+
+    if (req.file) {
+      if (req.file.path) {
+        image = req.file.path;
+        cloudinaryId = req.file.filename || null;
+      } else if (req.file.buffer) {
+        image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+      }
+    }
 
     const parsedSizes = sizes ? (typeof sizes === 'string' ? JSON.parse(sizes) : sizes) : [];
 
@@ -159,6 +168,18 @@ const updateProduct = async (req, res, next) => {
     const existing = await prisma.product.findUnique({ where: { id: req.params.id } });
     if (!existing) return next(createError('Product not found', 404));
 
+    let image = existing.image;
+    let cloudinaryId = existing.cloudinaryId;
+
+    if (req.file) {
+      if (req.file.path) {
+        image = req.file.path;
+        cloudinaryId = req.file.filename || null;
+      } else if (req.file.buffer) {
+        image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+      }
+    }
+
     // If a new image was uploaded, delete the old one from Cloudinary
     if (req.file && existing.cloudinaryId) {
       await cloudinary.uploader.destroy(existing.cloudinaryId).catch(() => {});
@@ -180,8 +201,8 @@ const updateProduct = async (req, res, next) => {
     }
 
     if (req.file) {
-      updateData.image = req.file.path;
-      updateData.cloudinaryId = req.file.filename;
+      updateData.image = image;
+      updateData.cloudinaryId = cloudinaryId;
     }
 
     const product = await prisma.product.update({
