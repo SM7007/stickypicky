@@ -6,11 +6,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#0a0a0a',
-        surface: '#111111',
-        border: '#1e1e1e',
-        primary: '#ffffff',
-        secondary: '#888888',
+        background: 'var(--bg)',
+        surface: 'var(--surface)',
+        border: 'var(--border)',
+        primary: 'var(--text-primary)',
+        secondary: 'var(--text-secondary)',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

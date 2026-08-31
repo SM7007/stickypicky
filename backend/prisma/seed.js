@@ -29,10 +29,12 @@ async function main() {
     prisma.category.upsert({ where: { slug: 'aesthetic' }, update: {}, create: { name: 'Aesthetic', slug: 'aesthetic' } }),
     prisma.category.upsert({ where: { slug: 'sports' }, update: {}, create: { name: 'Sports', slug: 'sports' } }),
     prisma.category.upsert({ where: { slug: 'minimal' }, update: {}, create: { name: 'Minimal', slug: 'minimal' } }),
+    prisma.category.upsert({ where: { slug: 'stickers' }, update: {}, create: { name: 'Stickers', slug: 'stickers' } }),
+    prisma.category.upsert({ where: { slug: 'anime-stickers' }, update: {}, create: { name: 'Anime Stickers', slug: 'anime-stickers' } }),
   ]);
   console.log('✅ Categories created');
 
-  const [anime, bollywood, aesthetic, sports, minimal] = categories;
+  const [anime, bollywood, aesthetic, sports, minimal, stickers, animeStickers] = categories;
 
   // ── Sample Products ──────────────────────────────────────
   const products = [

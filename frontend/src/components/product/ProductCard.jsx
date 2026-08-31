@@ -21,20 +21,20 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <Link to={`/products/${slug}`} className="group block bg-surface border border-border rounded-lg overflow-hidden transition-all duration-300 hover:border-white/30 hover:scale-[1.01] flex flex-col h-full relative">
+    <Link to={`/products/${slug}`} className="group block bg-surface border border-border rounded-lg overflow-hidden transition-all duration-300 hover:border-primary/40 hover:scale-[1.01] flex flex-col h-full relative shadow-sm hover:shadow-md">
       {/* Sale/Out of stock badge */}
       {isOutOfStock ? (
-        <span className="absolute top-3 left-3 bg-[#222222] text-[#888888] text-[10px] font-semibold tracking-wider px-2.5 py-1 rounded-full uppercase z-10 border border-border">
+        <span className="absolute top-3 left-3 bg-surface text-secondary text-[10px] font-semibold tracking-wider px-2.5 py-1 rounded-full uppercase z-10 border border-border">
           Sold Out
         </span>
       ) : discount > 0 ? (
-        <span className="absolute top-3 left-3 bg-white text-black text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full uppercase z-10">
+        <span className="absolute top-3 left-3 bg-primary text-background text-[10px] font-bold tracking-wider px-2.5 py-1 rounded-full uppercase z-10 shadow-sm">
           -{discount}% OFF
         </span>
       ) : null}
 
       {/* Product Image */}
-      <div className="relative aspect-[3/4] w-full overflow-hidden bg-zinc-900 border-b border-border flex items-center justify-center">
+      <div className="relative aspect-[3/4] w-full overflow-hidden bg-background border-b border-border flex items-center justify-center">
         <img
           src={image || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800'}
           alt={name}
@@ -46,12 +46,12 @@ const ProductCard = ({ product }) => {
           }}
         />
         
-        {/* Hover overlay button (hidden on touch devices via class, always present/visible as icon button on mobile) */}
+        {/* Hover overlay button */}
         {!isOutOfStock && (
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center hidden sm:flex">
             <button
               onClick={handleAddClick}
-              className="bg-white text-black font-semibold text-xs tracking-wider uppercase py-2.5 px-5 rounded shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center gap-1.5 hover:bg-zinc-200"
+              className="bg-primary text-background font-semibold text-xs tracking-wider uppercase py-2.5 px-5 rounded shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 flex items-center gap-1.5 hover:opacity-90 cursor-pointer"
             >
               <ShoppingCart size={14} /> Add To Cart
             </button>
@@ -64,11 +64,11 @@ const ProductCard = ({ product }) => {
         <span className="text-[10px] text-secondary font-semibold uppercase tracking-wider mb-1">
           {product.category?.name || 'Poster'}
         </span>
-        <h3 className="text-sm font-semibold text-white group-hover:text-glow leading-snug line-clamp-2 mb-2 flex-grow">
+        <h3 className="text-sm font-semibold text-primary group-hover:opacity-85 leading-snug line-clamp-2 mb-2 flex-grow">
           {name}
         </h3>
         <div className="flex items-baseline gap-2 mb-4">
-          <span className="text-sm font-bold text-white">
+          <span className="text-sm font-bold text-primary">
             {formatPrice(price)}
           </span>
           {originalPrice && (
@@ -78,14 +78,14 @@ const ProductCard = ({ product }) => {
           )}
         </div>
 
-        {/* Action Button for mobile / fallback */}
+        {/* Action Button for mobile */}
         <button
           onClick={handleAddClick}
           disabled={isOutOfStock}
           className={`w-full py-2 border rounded font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 sm:hidden ${
             isOutOfStock
               ? 'border-border text-secondary cursor-not-allowed bg-transparent'
-              : 'border-white text-white hover:bg-white hover:text-black transition-colors duration-200 bg-transparent'
+              : 'border-primary text-primary hover:bg-primary hover:text-background transition-colors duration-200 bg-transparent'
           }`}
         >
           {isOutOfStock ? 'Sold Out' : (

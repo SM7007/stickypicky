@@ -4,6 +4,12 @@ const { createError } = require('../middleware/errorMiddleware');
 // GET /api/categories
 const getCategories = async (req, res, next) => {
   try {
+    // Auto-ensure default Stickers category exists
+    const hasStickers = await prisma.category.findUnique({ where: { slug: 'stickers' } });
+    if (!hasStickers) {
+      await prisma.category.create({ data: { name: 'Stickers', slug: 'stickers' } });
+    }
+
     const categories = await prisma.category.findMany({
       orderBy: { name: 'asc' },
       include: { _count: { select: { products: { where: { active: true } } } } },

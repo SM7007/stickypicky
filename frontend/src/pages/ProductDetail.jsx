@@ -79,22 +79,22 @@ const ProductDetail = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Breadcrumbs */}
         <nav className="text-xs text-secondary mb-8">
-          <Link to="/" className="hover:text-white transition-colors">Home</Link>
+          <Link to="/" className="hover:text-primary transition-colors">Home</Link>
           <span className="mx-2">/</span>
-          <Link to="/shop" className="hover:text-white transition-colors">Shop</Link>
+          <Link to="/shop" className="hover:text-primary transition-colors">Shop</Link>
           <span className="mx-2">/</span>
-          <Link to={`/shop?category=${product.category?.slug}`} className="hover:text-white transition-colors capitalize">
+          <Link to={`/shop?category=${product.category?.slug}`} className="hover:text-primary transition-colors capitalize">
             {product.category?.name}
           </Link>
           <span className="mx-2">/</span>
-          <span className="text-white font-medium">{product.name}</span>
+          <span className="text-primary font-medium">{product.name}</span>
         </nav>
 
         {/* Layout */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
           {/* Left Column - Large Image Showcase */}
           <div className="md:col-span-6 flex flex-col gap-4">
-            <div className="aspect-[3/4] w-full rounded-lg overflow-hidden border border-border bg-surface relative flex items-center justify-center">
+            <div className="aspect-[3/4] w-full rounded-lg overflow-hidden border border-border bg-surface relative flex items-center justify-center shadow-sm">
               <img
                 src={product.image || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800'}
                 alt={product.name}
@@ -110,17 +110,17 @@ const ProductDetail = () => {
           {/* Right Column - Product Info and Config */}
           <div className="md:col-span-6 space-y-6">
             <div>
-              <span className="text-xs font-bold bg-white/5 border border-white/10 px-3 py-1 rounded-full uppercase tracking-wider text-secondary">
+              <span className="text-xs font-bold bg-surface border border-border px-3 py-1 rounded-full uppercase tracking-wider text-secondary">
                 {product.category?.name}
               </span>
-              <h1 className="text-3xl sm:text-4xl font-bold font-display text-white mt-4 leading-tight">
+              <h1 className="text-3xl sm:text-4xl font-bold font-display text-primary mt-4 leading-tight">
                 {product.name}
               </h1>
             </div>
 
             {/* Price display */}
             <div className="flex items-baseline gap-3 border-y border-border py-4">
-              <span className="text-2xl font-bold text-white">
+              <span className="text-2xl font-bold text-primary">
                 {formatPrice(currentPrice)}
               </span>
               {product.originalPrice && (
@@ -128,7 +128,7 @@ const ProductDetail = () => {
                   <span className="text-sm text-secondary line-through">
                     {formatPrice(product.originalPrice)}
                   </span>
-                  <span className="text-xs font-bold text-white bg-white/10 px-2 py-0.5 rounded">
+                  <span className="text-xs font-bold text-primary bg-surface border border-border px-2 py-0.5 rounded">
                     {discount}% OFF
                   </span>
                 </>
@@ -138,19 +138,19 @@ const ProductDetail = () => {
             {/* Sizes selector pills */}
             {product.sizes && product.sizes.length > 0 && (
               <div className="space-y-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-secondary">Select Size</span>
+                <span className="text-xs font-bold uppercase tracking-wider text-secondary">Select Size / Pack</span>
                 <div className="flex flex-wrap gap-3">
                   {product.sizes.map((s) => (
                     <button
                       key={s.size}
                       onClick={() => {
                         setSelectedSize(s.size);
-                        setQuantity(1); // reset qty on size change
+                        setQuantity(1);
                       }}
-                      className={`px-6 py-2.5 rounded font-bold text-xs uppercase tracking-wider transition-all duration-200 border ${
+                      className={`px-6 py-2.5 rounded font-bold text-xs uppercase tracking-wider transition-all duration-200 border cursor-pointer ${
                         selectedSize === s.size
-                          ? 'bg-white border-white text-black'
-                          : 'border-border text-secondary hover:text-white hover:border-white/30'
+                          ? 'bg-primary border-primary text-background shadow-sm'
+                          : 'border-border text-secondary hover:text-primary hover:border-primary/40 bg-surface'
                       }`}
                     >
                       {s.size}
@@ -168,15 +168,15 @@ const ProductDetail = () => {
                   <button
                     onClick={() => handleQtyChange(-1)}
                     disabled={quantity <= 1 || isOutOfStock}
-                    className="p-3 text-secondary hover:text-white disabled:opacity-30 transition-colors"
+                    className="p-3 text-secondary hover:text-primary disabled:opacity-30 transition-colors cursor-pointer"
                   >
                     <Minus size={14} />
                   </button>
-                  <span className="w-12 text-center text-sm font-semibold text-white">{quantity}</span>
+                  <span className="w-12 text-center text-sm font-semibold text-primary">{quantity}</span>
                   <button
                     onClick={() => handleQtyChange(1)}
                     disabled={quantity >= currentStock || isOutOfStock}
-                    className="p-3 text-secondary hover:text-white disabled:opacity-30 transition-colors"
+                    className="p-3 text-secondary hover:text-primary disabled:opacity-30 transition-colors cursor-pointer"
                   >
                     <Plus size={14} />
                   </button>
@@ -200,14 +200,14 @@ const ProductDetail = () => {
               <button
                 onClick={handleAddToCart}
                 disabled={isOutOfStock}
-                className="w-full border border-white text-white font-bold uppercase tracking-wider text-sm py-4 rounded hover:bg-white/5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full border border-primary text-primary font-bold uppercase tracking-wider text-sm py-4 rounded hover:bg-surface transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 Add To Cart
               </button>
               <button
                 onClick={handleBuyNow}
                 disabled={isOutOfStock}
-                className="w-full bg-white text-black font-bold uppercase tracking-wider text-sm py-4 rounded hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-primary text-background font-bold uppercase tracking-wider text-sm py-4 rounded hover:opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 Buy It Now
               </button>
@@ -215,7 +215,7 @@ const ProductDetail = () => {
 
             {/* Core Description Text */}
             <div className="pt-6 border-t border-border space-y-4">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-white">Details</h3>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Details</h3>
               <p className="text-sm text-secondary leading-relaxed">
                 {product.description || 'Museum-quality posters made on thick and durable matte paper. Add a wonderful accent to your room and office with these posters that are sure to brighten any environment.'}
               </p>
@@ -224,13 +224,13 @@ const ProductDetail = () => {
             {/* Selling propositions */}
             <div className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-border">
               <div className="flex items-center gap-2 text-xs text-secondary">
-                <Truck size={14} className="text-white" /> Free Delivery &gt; ₹{settings.freeDeliveryAbove}
+                <Truck size={14} className="text-primary" /> Free Delivery &gt; ₹{settings.freeDeliveryAbove}
               </div>
               <div className="flex items-center gap-2 text-xs text-secondary">
-                <Undo size={14} className="text-white" /> Easy 7-Day Returns
+                <Undo size={14} className="text-primary" /> Easy 7-Day Returns
               </div>
               <div className="flex items-center gap-2 text-xs text-secondary">
-                <ShieldCheck size={14} className="text-white" /> Secure Razorpay Checkout
+                <ShieldCheck size={14} className="text-primary" /> Secure Razorpay Checkout
               </div>
             </div>
           </div>

@@ -1,10 +1,40 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: var(--bg);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+}
+
+:root {
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --border: #1e1e1e;
+  --text-primary: #ffffff;
+  --text-secondary: #888888;
+  --input-bg: #141414;
+}
+
+:root[data-theme="light"],
+.light {
+  --bg: #f8fafc;
+  --surface: #ffffff;
+  --border: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --input-bg: #f1f5f9;
+}
+
 @layer base {
   body {
-    background-color: #0a0a0a;
-    color: #ffffff;
+    background-color: var(--bg);
+    color: var(--text-primary);
     font-family: 'Inter', sans-serif;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
   }
 }
 
@@ -13,15 +43,18 @@
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: var(--bg);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #222222;
+  background: var(--border);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #333333;
+  background: var(--text-secondary);
 }
 
 /* Hide default spinners in numeric inputs */
@@ -30,11 +63,15 @@ input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 input[type="number"] {
   -moz-appearance: textfield;
 }
 
-/* Custom styles for styling specific elements if needed */
 .text-glow {
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
+}
+
+.light .text-glow {
+  text-shadow: none;
 }

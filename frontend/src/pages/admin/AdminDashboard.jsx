@@ -30,17 +30,17 @@ const AdminDashboard = () => {
   if (error || !stats) return <AdminLayout><ErrorMessage message={error} /></AdminLayout>;
 
   const statCards = [
-    { name: 'Total Sales / Revenue', value: formatPrice(stats.totalRevenue), icon: CreditCard, color: 'text-emerald-400' },
-    { name: 'Total Products Active', value: stats.totalProducts, icon: ShoppingBag, color: 'text-blue-400' },
-    { name: 'Total Orders Placed', value: stats.totalOrders, icon: FolderOpen, color: 'text-white' },
-    { name: 'Pending Orders', value: stats.pendingOrders, icon: ClipboardList, color: 'text-amber-400' },
+    { name: 'Total Sales / Revenue', value: formatPrice(stats.totalRevenue), icon: CreditCard, color: 'text-emerald-500 font-bold' },
+    { name: 'Total Products Active', value: stats.totalProducts, icon: ShoppingBag, color: 'text-blue-500 font-bold' },
+    { name: 'Total Orders Placed', value: stats.totalOrders, icon: FolderOpen, color: 'text-primary' },
+    { name: 'Pending Orders', value: stats.pendingOrders, icon: ClipboardList, color: 'text-amber-500 font-bold' },
   ];
 
   return (
     <AdminLayout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-bold font-display uppercase tracking-wider text-white">Dashboard Overview</h1>
+          <h1 className="text-2xl font-bold font-display uppercase tracking-wider text-primary">Dashboard Overview</h1>
           <p className="text-xs text-secondary mt-1">Real-time statistics of your stickypicky storefront</p>
         </div>
 
@@ -49,24 +49,24 @@ const AdminDashboard = () => {
           {statCards.map((card, i) => {
             const Icon = card.icon;
             return (
-              <div key={i} className="bg-surface border border-border rounded-lg p-6 space-y-4">
+              <div key={i} className="bg-surface border border-border rounded-lg p-6 space-y-4 shadow-sm">
                 <div className="flex justify-between items-start">
                   <span className="text-[10px] font-bold text-secondary uppercase tracking-wider">{card.name}</span>
                   <Icon size={18} className={card.color} />
                 </div>
-                <p className="text-2xl font-bold text-white tracking-tight">{card.value}</p>
+                <p className="text-2xl font-bold text-primary tracking-tight">{card.value}</p>
               </div>
             );
           })}
         </div>
 
         {/* Admin Instructions Section */}
-        <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-white">Store Management Instructions</h3>
+        <div className="bg-surface border border-border rounded-lg p-6 space-y-4 shadow-sm">
+          <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Store Management Instructions</h3>
           <ul className="text-xs text-secondary space-y-2 list-disc list-inside leading-relaxed">
-            <li>Go to <a href="/admin/products" className="text-white hover:underline font-semibold">Products</a> to add, edit or delete posters and manage stocks.</li>
+            <li>Go to <a href="/admin/products" className="text-primary hover:underline font-semibold">Products</a> to add, edit or delete posters and manage stocks.</li>
             <li>Go to <a href="/admin/orders" className="text-white hover:underline font-semibold">Orders</a> to view details of customer purchases and confirm/ship products.</li>
-            <li>Go to <a href="/admin/settings" className="text-white hover:underline font-semibold">Delivery Settings</a> to configure delivery charges and free delivery threshold.</li>
+            <li>Go to <a href="/admin/settings" className="text-primary hover:underline font-semibold">Delivery Settings</a> to configure delivery charges and free delivery threshold.</li>
             <li>Prices configured inside product size variants are matched dynamically during Razorpay verification checks.</li>
             <li>Images uploaded are hosted instantly in Cloudinary.</li>
           </ul>

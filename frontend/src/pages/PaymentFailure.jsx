@@ -9,7 +9,7 @@ const PaymentFailure = () => {
       <div className="max-w-md mx-auto text-center py-20 px-4">
         <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-6" />
         <span className="text-xs font-bold uppercase tracking-widest text-red-500 block mb-2">Payment Failed</span>
-        <h1 className="text-3xl font-bold font-display text-white uppercase tracking-wider mb-4">
+        <h1 className="text-3xl font-bold font-display text-primary uppercase tracking-wider mb-4">
           Transaction declined
         </h1>
         <p className="text-secondary text-sm mb-8 leading-relaxed">
@@ -19,13 +19,13 @@ const PaymentFailure = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             to="/checkout"
-            className="bg-white text-black font-bold uppercase tracking-wider text-xs px-8 py-4 rounded hover:bg-zinc-200 transition-colors inline-flex items-center justify-center gap-2"
+            className="bg-primary text-background font-bold uppercase tracking-wider text-xs px-8 py-4 rounded hover:opacity-90 transition-colors inline-flex items-center justify-center gap-2"
           >
             <RefreshCcw size={14} /> Retry Payment
           </Link>
           <Link
             to="/cart"
-            className="border border-border text-secondary hover:text-white font-semibold uppercase tracking-wider text-xs px-8 py-4 rounded transition-colors inline-flex items-center justify-center gap-2"
+            className="border border-border text-secondary hover:text-primary font-semibold uppercase tracking-wider text-xs px-8 py-4 rounded transition-colors inline-flex items-center justify-center gap-2"
           >
             Return to Cart <ArrowRight size={14} />
           </Link>

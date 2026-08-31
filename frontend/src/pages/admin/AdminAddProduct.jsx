@@ -49,6 +49,32 @@ const AdminAddProduct = () => {
     setSizes(updated);
   };
 
+  const applyPosterPreset = () => {
+    setSizes([
+      { size: 'A4', price: '', stock: '' },
+      { size: 'A3', price: '', stock: '' },
+      { size: 'A2', price: '', stock: '' },
+      { size: 'A1', price: '', stock: '' },
+    ]);
+  };
+
+  const applyStickerPreset = () => {
+    setSizes([
+      { size: 'Single Die-Cut (3")', price: '', stock: '' },
+      { size: 'Pack of 5', price: '', stock: '' },
+      { size: 'Pack of 10', price: '', stock: '' },
+      { size: 'Sticker Sheet (A5)', price: '', stock: '' },
+    ]);
+  };
+
+  const addCustomVariant = () => {
+    setSizes([...sizes, { size: '', price: '', stock: '' }]);
+  };
+
+  const removeVariant = (index) => {
+    setSizes(sizes.filter((_, i) => i !== index));
+  };
+
   const handleFileChange = (e) => {
     setImageFile(e.target.files[0]);
   };
@@ -98,17 +124,17 @@ const AdminAddProduct = () => {
     <AdminLayout>
       <div className="space-y-8">
         <div>
-          <Link to="/admin/products" className="text-xs text-secondary hover:text-white inline-flex items-center gap-1.5 mb-4">
+          <Link to="/admin/products" className="text-xs text-secondary hover:text-primary inline-flex items-center gap-1.5 mb-4">
             <ArrowLeft size={12} /> Back to Catalog
           </Link>
-          <h1 className="text-2xl font-bold font-display uppercase tracking-wider text-white">Add New Poster</h1>
+          <h1 className="text-2xl font-bold font-display uppercase tracking-wider text-primary">Add New Poster</h1>
           <p className="text-xs text-secondary mt-1">Publish a fresh poster design to the store</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6 max-w-3xl">
           {/* General Section */}
-          <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white border-b border-border/40 pb-2">General Info</h3>
+          <div className="bg-surface border border-border rounded-lg p-6 space-y-4 shadow-sm">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-primary border-b border-border/40 pb-2">General Info</h3>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
@@ -119,7 +145,7 @@ const AdminAddProduct = () => {
                   onChange={(e) => setName(e.target.value)}
                   required
                   placeholder="Gojo Satoru Poster"
-                  className="w-full bg-background text-white border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-white"
+                  className="w-full bg-background text-primary border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-primary"
                 />
               </div>
               <div>
@@ -128,10 +154,10 @@ const AdminAddProduct = () => {
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
                   required
-                  className="w-full bg-background text-white border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-white cursor-pointer"
+                  className="w-full bg-background text-primary border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-primary cursor-pointer"
                 >
                   {categories.map(c => (
-                    <option key={c.id} value={c.id} className="bg-[#0a0a0a] text-white">{c.name}</option>
+                    <option key={c.id} value={c.id} className="bg-surface text-primary">{c.name}</option>
                   ))}
                 </select>
               </div>
@@ -144,14 +170,14 @@ const AdminAddProduct = () => {
                 onChange={(e) => setDescription(e.target.value)}
                 rows="3"
                 placeholder="Matte finish poster, fade resistant..."
-                className="w-full bg-background text-white border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-white resize-none"
+                className="w-full bg-background text-primary border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-primary resize-none"
               />
             </div>
           </div>
 
           {/* Pricing & Stock */}
-          <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white border-b border-border/40 pb-2">Pricing & Base Stock</h3>
+          <div className="bg-surface border border-border rounded-lg p-6 space-y-4 shadow-sm">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-primary border-b border-border/40 pb-2">Pricing & Base Stock</h3>
             
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
@@ -162,7 +188,7 @@ const AdminAddProduct = () => {
                   onChange={(e) => setPrice(e.target.value)}
                   required
                   placeholder="299"
-                  className="w-full bg-background text-white border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-white"
+                  className="w-full bg-background text-primary border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-primary"
                 />
               </div>
               <div>
@@ -172,7 +198,7 @@ const AdminAddProduct = () => {
                   value={originalPrice}
                   onChange={(e) => setOriginalPrice(e.target.value)}
                   placeholder="499"
-                  className="w-full bg-background text-white border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-white"
+                  className="w-full bg-background text-primary border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-primary"
                 />
               </div>
               <div>
@@ -183,47 +209,88 @@ const AdminAddProduct = () => {
                   onChange={(e) => setStock(e.target.value)}
                   required
                   placeholder="50"
-                  className="w-full bg-background text-white border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-white"
+                  className="w-full bg-background text-primary border border-border rounded px-4 py-2.5 text-sm focus:outline-none focus:border-primary"
                 />
               </div>
             </div>
           </div>
 
-          {/* Poster Sizes configuration */}
-          <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white border-b border-border/40 pb-2">
-              Size Specific Variant Pricing (Optional)
-            </h3>
+          {/* Sizes / Variants configuration */}
+          <div className="bg-surface border border-border rounded-lg p-6 space-y-4 shadow-sm">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-border/40 pb-2">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-primary">
+                Variant Pricing & Options (Optional)
+              </h3>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={applyPosterPreset}
+                  className="text-[10px] font-bold px-2.5 py-1 rounded bg-background border border-border text-primary hover:bg-surface transition cursor-pointer"
+                >
+                  Poster Presets
+                </button>
+                <button
+                  type="button"
+                  onClick={applyStickerPreset}
+                  className="text-[10px] font-bold px-2.5 py-1 rounded bg-background border border-border text-primary hover:bg-surface transition cursor-pointer"
+                >
+                  Sticker Presets
+                </button>
+              </div>
+            </div>
+
             <p className="text-[10px] text-secondary">
-              Configure prices and stocks for size models. If left blank, sizes will not be added and the base price/stock will be used.
+              Configure prices and stock for poster sizes or sticker packs. You can customize variant names freely. Leave blank if product has a single price/stock.
             </p>
 
             <div className="space-y-3">
               {sizes.map((s, idx) => (
-                <div key={s.size} className="flex items-center gap-4 border border-border/40 p-3 rounded bg-background/50">
-                  <span className="w-12 text-xs font-bold text-white uppercase">{s.size}</span>
+                <div key={idx} className="flex items-center gap-3 border border-border p-3 rounded bg-background/50">
+                  <input
+                    type="text"
+                    placeholder="Variant name (e.g. Pack of 5, A4)"
+                    value={s.size}
+                    onChange={(e) => handleSizeChange(idx, 'size', e.target.value)}
+                    className="w-1/3 min-w-[100px] bg-background text-primary border border-border rounded px-3 py-1.5 text-xs font-semibold focus:outline-none focus:border-primary"
+                  />
                   <input
                     type="number"
-                    placeholder="Price for size (e.g. 399)"
+                    placeholder="Price (₹)"
                     value={s.price}
                     onChange={(e) => handleSizeChange(idx, 'price', e.target.value)}
-                    className="w-full bg-background text-white border border-border rounded px-3 py-1.5 text-xs focus:outline-none focus:border-white"
+                    className="w-1/3 bg-background text-primary border border-border rounded px-3 py-1.5 text-xs focus:outline-none focus:border-primary"
                   />
                   <input
                     type="number"
-                    placeholder="Stock for size"
+                    placeholder="Stock"
                     value={s.stock}
                     onChange={(e) => handleSizeChange(idx, 'stock', e.target.value)}
-                    className="w-full bg-background text-white border border-border rounded px-3 py-1.5 text-xs focus:outline-none focus:border-white"
+                    className="w-1/3 bg-background text-primary border border-border rounded px-3 py-1.5 text-xs focus:outline-none focus:border-primary"
                   />
+                  <button
+                    type="button"
+                    onClick={() => removeVariant(idx)}
+                    className="text-secondary hover:text-red-500 p-1 cursor-pointer"
+                    title="Remove variant"
+                  >
+                    <Trash2 size={14} />
+                  </button>
                 </div>
               ))}
             </div>
+
+            <button
+              type="button"
+              onClick={addCustomVariant}
+              className="text-xs font-semibold text-primary hover:opacity-85 flex items-center gap-1 mt-2 cursor-pointer"
+            >
+              <Plus size={14} /> Add Another Variant
+            </button>
           </div>
 
           {/* Media upload */}
-          <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white border-b border-border/40 pb-2">Media Upload</h3>
+          <div className="bg-surface border border-border rounded-lg p-6 space-y-4 shadow-sm">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-primary border-b border-border/40 pb-2">Media Upload</h3>
             <div>
               <label className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">Poster Image File *</label>
               <input
@@ -231,32 +298,32 @@ const AdminAddProduct = () => {
                 accept="image/*"
                 onChange={handleFileChange}
                 required
-                className="w-full text-xs text-secondary file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-white file:text-black hover:file:bg-zinc-200 cursor-pointer"
+                className="w-full text-xs text-secondary file:mr-4 file:py-2 file:px-4 file:rounded file:border file:border-border file:text-xs file:font-semibold file:bg-primary file:text-background hover:file:opacity-90 cursor-pointer"
               />
             </div>
           </div>
 
           {/* Settings checkboxes */}
-          <div className="bg-surface border border-border rounded-lg p-6 space-y-4">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-white border-b border-border/40 pb-2">Publish Settings</h3>
+          <div className="bg-surface border border-border rounded-lg p-6 space-y-4 shadow-sm">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-primary border-b border-border/40 pb-2">Publish Settings</h3>
             <div className="flex gap-8">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={featured}
                   onChange={(e) => setFeatured(e.target.checked)}
-                  className="rounded bg-background border-border text-white h-4 w-4"
+                  className="rounded bg-background border-border text-primary h-4 w-4"
                 />
-                <span className="text-xs font-semibold text-secondary hover:text-white">Feature in Homepage</span>
+                <span className="text-xs font-semibold text-secondary hover:text-primary">Feature in Homepage</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={active}
                   onChange={(e) => setActive(e.target.checked)}
-                  className="rounded bg-background border-border text-white h-4 w-4"
+                  className="rounded bg-background border-border text-primary h-4 w-4"
                 />
-                <span className="text-xs font-semibold text-secondary hover:text-white">Active / Visible</span>
+                <span className="text-xs font-semibold text-secondary hover:text-primary">Active / Visible</span>
               </label>
             </div>
           </div>
@@ -265,14 +332,14 @@ const AdminAddProduct = () => {
           <div className="flex justify-end gap-4">
             <Link
               to="/admin/products"
-              className="border border-border text-secondary hover:text-white py-3 px-6 rounded uppercase font-semibold text-xs tracking-wider"
+              className="border border-border text-secondary hover:text-primary py-3 px-6 rounded uppercase font-semibold text-xs tracking-wider"
             >
               Cancel
             </Link>
             <button
               type="submit"
               disabled={loading}
-              className="bg-white text-black py-3 px-8 rounded uppercase font-bold text-xs tracking-wider hover:bg-zinc-200 disabled:opacity-50"
+              className="bg-primary text-background py-3 px-8 rounded uppercase font-bold text-xs tracking-wider hover:opacity-90 disabled:opacity-50 cursor-pointer"
             >
               {loading ? 'Creating Poster...' : 'Publish Poster'}
             </button>

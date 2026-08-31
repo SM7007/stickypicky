@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { SettingsProvider } from './context/SettingsContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { Toaster } from 'react-hot-toast';
 
 // Customer Pages
@@ -31,8 +32,9 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 
 function App() {
   return (
-    <AuthProvider>
-      <SettingsProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <SettingsProvider>
         <CartProvider>
           <Router>
           <Routes>
@@ -124,8 +126,9 @@ function App() {
           }}
         />
         </CartProvider>
-      </SettingsProvider>
-    </AuthProvider>
+        </SettingsProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

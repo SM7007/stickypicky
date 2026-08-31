@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
-import { ShoppingBag, User, LogOut, Menu, X, Search, Shield } from 'lucide-react';
+import { useTheme } from '../../hooks/useTheme';
+import { ShoppingBag, User, LogOut, Menu, X, Search, Shield, Sun, Moon } from 'lucide-react';
 
 const Navbar = () => {
   const { user, logout, isAdmin } = useAuth();
   const { itemCount } = useCart();
+  const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,14 +39,18 @@ const Navbar = () => {
             {/* Desktop Nav Links */}
             <div className="hidden md:flex space-x-8 items-center">
               <Link to="/shop" className="text-sm font-medium text-secondary hover:text-white transition-colors duration-200">
-                Shop
+                Shop Posters
+              </Link>
+              <Link to="/shop?category=stickers" className="text-sm font-medium text-secondary hover:text-white transition-colors duration-200">
+                Stickers
               </Link>
               <div className="relative group">
                 <span className="text-sm font-medium text-secondary hover:text-white cursor-pointer transition-colors duration-200">
                   Categories
                 </span>
                 <div className="absolute left-0 mt-2 w-48 bg-[#111111] border border-[#1e1e1e] rounded shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity duration-200 z-50">
-                  <Link to="/shop" className="block px-4 py-2 text-sm text-secondary hover:text-white hover:bg-[#1a1a1a]">All Posters</Link>
+                  <Link to="/shop" className="block px-4 py-2 text-sm text-secondary hover:text-white hover:bg-[#1a1a1a]">All Products</Link>
+                  <Link to="/shop?category=stickers" className="block px-4 py-2 text-sm text-secondary hover:text-white hover:bg-[#1a1a1a]">Vinyl Stickers</Link>
                   <Link to="/shop?category=anime" className="block px-4 py-2 text-sm text-secondary hover:text-white hover:bg-[#1a1a1a]">Anime</Link>
                   <Link to="/shop?category=bollywood" className="block px-4 py-2 text-sm text-secondary hover:text-white hover:bg-[#1a1a1a]">Bollywood</Link>
                   <Link to="/shop?category=aesthetic" className="block px-4 py-2 text-sm text-secondary hover:text-white hover:bg-[#1a1a1a]">Aesthetic</Link>
@@ -81,6 +87,15 @@ const Navbar = () => {
                   <Search size={18} />
                 </button>
               )}
+
+              {/* Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="text-secondary hover:text-primary transition-colors duration-200 p-1.5 rounded-full hover:bg-surface"
+                title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              >
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
 
               {/* Admin Dashboard Shield */}
               {isAdmin && (
@@ -137,6 +152,14 @@ const Navbar = () => {
                   </span>
                 )}
               </Link>
+              {/* Mobile Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                className="text-secondary hover:text-primary transition-colors duration-200 p-1"
+                aria-label="Toggle theme"
+              >
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
               <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-secondary hover:text-white">
                 {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
@@ -147,23 +170,20 @@ const Navbar = () => {
 
       {/* Mobile Off-Canvas Slide-out Sidebar Drawer with Smooth Transitions */}
       <div
-        className={`fixed inset-0 z-[100] md:hidden flex transition-all duration-300 ${
-          mobileMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
-        }`}
+        className={`fixed inset-0 z-[100] md:hidden flex transition-all duration-300 ${mobileMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+          }`}
       >
         {/* Backdrop Overlay */}
         <div
-          className={`fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 ease-in-out ${
-            mobileMenuOpen ? 'opacity-100' : 'opacity-0'
-          }`}
+          className={`fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 ease-in-out ${mobileMenuOpen ? 'opacity-100' : 'opacity-0'
+            }`}
           onClick={() => setMobileMenuOpen(false)}
         />
 
         {/* Slide-out Sidebar */}
         <div
-          className={`relative w-4/5 max-w-sm bg-[#0d0d0d] border-r border-[#1e1e1e] h-screen flex flex-col z-[101] p-6 shadow-2xl overflow-y-auto transform transition-transform duration-300 ease-out ${
-            mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
+          className={`relative w-4/5 max-w-sm bg-[#0d0d0d] border-r border-[#1e1e1e] h-screen flex flex-col z-[101] p-6 shadow-2xl overflow-y-auto transform transition-transform duration-300 ease-out ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
         >
           {/* Drawer Header */}
           <div className="flex justify-between items-center pb-5 border-b border-[#1e1e1e] mb-6">
@@ -203,7 +223,14 @@ const Navbar = () => {
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-base font-semibold text-white hover:text-secondary transition-colors py-1.5"
                 >
-                  Shop All Posters
+                  Shop All Products
+                </Link>
+                <Link
+                  to="/shop?category=stickers"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-base font-semibold text-white hover:text-secondary transition-colors py-1.5"
+                >
+                  Stickers
                 </Link>
               </div>
             </div>
@@ -211,6 +238,7 @@ const Navbar = () => {
             <div>
               <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block mb-3">Categories</span>
               <div className="flex flex-col space-y-2 pl-2 border-l border-[#1e1e1e]">
+                <Link to="/shop?category=stickers" onClick={() => setMobileMenuOpen(false)} className="text-sm text-zinc-400 hover:text-white transition-colors py-1">Stickers</Link>
                 <Link to="/shop?category=anime" onClick={() => setMobileMenuOpen(false)} className="text-sm text-zinc-400 hover:text-white transition-colors py-1">Anime</Link>
                 <Link to="/shop?category=bollywood" onClick={() => setMobileMenuOpen(false)} className="text-sm text-zinc-400 hover:text-white transition-colors py-1">Bollywood</Link>
                 <Link to="/shop?category=aesthetic" onClick={() => setMobileMenuOpen(false)} className="text-sm text-zinc-400 hover:text-white transition-colors py-1">Aesthetic</Link>

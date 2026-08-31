@@ -54,9 +54,9 @@ const Register = () => {
   return (
     <MainLayout>
       <div className="max-w-md mx-auto px-4 py-16 sm:py-24">
-        <div className="bg-surface border border-border rounded-lg p-8 space-y-6">
+        <div className="bg-surface border border-border rounded-lg p-8 space-y-6 shadow-sm">
           <div className="text-center">
-            <h1 className="text-2xl font-bold font-display text-white uppercase tracking-wider">Create Account</h1>
+            <h1 className="text-2xl font-bold font-display text-primary uppercase tracking-wider">Create Account</h1>
             <p className="text-xs text-secondary mt-1">Join the stickypicky poster collectors club</p>
           </div>
 
@@ -69,7 +69,7 @@ const Register = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full bg-background text-white border border-border rounded px-4 py-3 text-sm focus:outline-none focus:border-white"
+                className="w-full bg-background text-primary border border-border rounded px-4 py-3 text-sm focus:outline-none focus:border-primary"
                 placeholder="John Doe"
               />
             </div>
@@ -82,7 +82,7 @@ const Register = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full bg-background text-white border border-border rounded px-4 py-3 text-sm focus:outline-none focus:border-white"
+                className="w-full bg-background text-primary border border-border rounded px-4 py-3 text-sm focus:outline-none focus:border-primary"
                 placeholder="you@example.com"
               />
             </div>
@@ -94,7 +94,7 @@ const Register = () => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="w-full bg-background text-white border border-border rounded px-4 py-3 text-sm focus:outline-none focus:border-white"
+                className="w-full bg-background text-primary border border-border rounded px-4 py-3 text-sm focus:outline-none focus:border-primary"
                 placeholder="9999999999"
               />
             </div>
@@ -107,7 +107,7 @@ const Register = () => {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-full bg-background text-white border border-border rounded px-4 py-3 text-sm focus:outline-none focus:border-white"
+                className="w-full bg-background text-primary border border-border rounded px-4 py-3 text-sm focus:outline-none focus:border-primary"
                 placeholder="••••••••"
               />
             </div>
@@ -120,7 +120,7 @@ const Register = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
-                className="w-full bg-background text-white border border-border rounded px-4 py-3 text-sm focus:outline-none focus:border-white"
+                className="w-full bg-background text-primary border border-border rounded px-4 py-3 text-sm focus:outline-none focus:border-primary"
                 placeholder="••••••••"
               />
             </div>
@@ -128,7 +128,7 @@ const Register = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-white text-black font-bold uppercase tracking-wider text-xs py-4 rounded hover:bg-zinc-200 transition-colors disabled:opacity-50"
+              className="w-full bg-primary text-background font-bold uppercase tracking-wider text-xs py-4 rounded hover:opacity-90 transition-colors disabled:opacity-50 cursor-pointer"
             >
               {loading ? 'Creating Account...' : 'Sign Up'}
             </button>
@@ -138,7 +138,7 @@ const Register = () => {
 
           <p className="text-center text-xs text-secondary">
             Already have an account?{' '}
-            <Link to={`/login?redirect=${encodeURIComponent(redirect)}`} className="text-white font-semibold hover:underline">
+            <Link to={`/login?redirect=${encodeURIComponent(redirect)}`} className="text-primary font-semibold hover:underline">
               Log in
             </Link>
           </p>

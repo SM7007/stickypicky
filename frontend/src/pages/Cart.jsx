@@ -17,11 +17,11 @@ const Cart = () => {
     return (
       <MainLayout>
         <div className="max-w-md mx-auto text-center py-20 px-4">
-          <h2 className="text-2xl font-bold font-display text-white mb-3">YOUR BAG IS EMPTY</h2>
+          <h2 className="text-2xl font-bold font-display text-primary mb-3">YOUR BAG IS EMPTY</h2>
           <p className="text-secondary text-sm mb-8">Once you find a poster you like, add it to your cart to start collecting.</p>
           <Link
             to="/shop"
-            className="bg-white text-black font-bold uppercase tracking-wider text-xs px-8 py-4 rounded hover:bg-zinc-200 transition-colors inline-flex items-center gap-2"
+            className="bg-primary text-background font-bold uppercase tracking-wider text-xs px-8 py-4 rounded hover:opacity-90 transition-colors inline-flex items-center gap-2"
           >
             Start Shopping <ArrowRight size={14} />
           </Link>
@@ -33,7 +33,7 @@ const Cart = () => {
   return (
     <MainLayout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <h1 className="text-3xl font-bold font-display text-white mb-10 uppercase tracking-wider">Your Bag</h1>
+        <h1 className="text-3xl font-bold font-display text-primary mb-10 uppercase tracking-wider">Your Bag</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Cart Items List */}
@@ -45,7 +45,7 @@ const Cart = () => {
                   className="flex items-center py-6 border-b border-border gap-4 sm:gap-6"
                 >
                   {/* Image */}
-                  <div className="h-24 w-18 flex-shrink-0 rounded bg-zinc-900 border border-border overflow-hidden">
+                  <div className="h-24 w-18 flex-shrink-0 rounded bg-background border border-border overflow-hidden">
                     <img src={item.image} alt={item.productName} className="h-full w-full object-cover" />
                   </div>
 
@@ -53,28 +53,28 @@ const Cart = () => {
                   <div className="flex-grow min-w-0">
                     <Link
                       to={`/products/${item.slug}`}
-                      className="text-sm font-semibold text-white hover:text-glow line-clamp-1"
+                      className="text-sm font-semibold text-primary hover:opacity-85 line-clamp-1"
                     >
                       {item.productName}
                     </Link>
                     {item.selectedSize && (
                       <span className="text-xs text-secondary mt-1 block">Size: {item.selectedSize}</span>
                     )}
-                    <span className="text-sm font-medium text-white mt-2 block">{formatPrice(item.price)}</span>
+                    <span className="text-sm font-medium text-primary mt-2 block">{formatPrice(item.price)}</span>
                   </div>
 
                   {/* Quantity selector */}
                   <div className="flex items-center border border-border rounded bg-surface">
                     <button
                       onClick={() => updateQuantity(item.productId, item.selectedSize, item.quantity - 1)}
-                      className="p-2 text-secondary hover:text-white"
+                      className="p-2 text-secondary hover:text-primary cursor-pointer"
                     >
                       <Minus size={12} />
                     </button>
-                    <span className="w-8 text-center text-xs font-semibold text-white">{item.quantity}</span>
+                    <span className="w-8 text-center text-xs font-semibold text-primary">{item.quantity}</span>
                     <button
                       onClick={() => updateQuantity(item.productId, item.selectedSize, item.quantity + 1)}
-                      className="p-2 text-secondary hover:text-white"
+                      className="p-2 text-secondary hover:text-primary cursor-pointer"
                     >
                       <Plus size={12} />
                     </button>
@@ -82,10 +82,10 @@ const Cart = () => {
 
                   {/* Total price & remove button */}
                   <div className="flex flex-col items-end gap-2">
-                    <span className="text-sm font-bold text-white">{formatPrice(item.price * item.quantity)}</span>
+                    <span className="text-sm font-bold text-primary">{formatPrice(item.price * item.quantity)}</span>
                     <button
                       onClick={() => removeFromCart(item.productId, item.selectedSize)}
-                      className="text-secondary hover:text-red-500 p-1"
+                      className="text-secondary hover:text-red-500 p-1 cursor-pointer"
                       title="Remove item"
                     >
                       <Trash2 size={16} />
@@ -97,24 +97,24 @@ const Cart = () => {
 
             {/* Bottom Actions */}
             <div className="pt-4">
-              <Link to="/shop" className="text-sm text-secondary hover:text-white inline-flex items-center gap-1.5">
+              <Link to="/shop" className="text-sm text-secondary hover:text-primary inline-flex items-center gap-1.5">
                 <ArrowLeft size={14} /> Continue Shopping
               </Link>
             </div>
           </div>
 
           {/* Cart Summary */}
-          <div className="lg:col-span-4 bg-surface border border-border rounded-lg p-6 space-y-6">
-            <h3 className="text-sm font-bold text-white uppercase tracking-wider">Order Summary</h3>
+          <div className="lg:col-span-4 bg-surface border border-border rounded-lg p-6 space-y-6 shadow-sm">
+            <h3 className="text-sm font-bold text-primary uppercase tracking-wider">Order Summary</h3>
 
             <div className="space-y-3 text-sm">
               <div className="flex justify-between text-secondary">
                 <span>Subtotal</span>
-                <span className="text-white font-medium">{formatPrice(subtotal)}</span>
+                <span className="text-primary font-medium">{formatPrice(subtotal)}</span>
               </div>
               <div className="flex justify-between text-secondary">
                 <span>Delivery Charge</span>
-                <span className="text-white font-medium">
+                <span className="text-primary font-medium">
                   {deliveryCharge === 0 ? 'Free' : formatPrice(deliveryCharge)}
                 </span>
               </div>
@@ -124,7 +124,7 @@ const Cart = () => {
                 </p>
               )}
               <hr className="border-border" />
-              <div className="flex justify-between text-base font-bold text-white">
+              <div className="flex justify-between text-base font-bold text-primary">
                 <span>Total Amount</span>
                 <span>{formatPrice(total)}</span>
               </div>
@@ -132,7 +132,7 @@ const Cart = () => {
 
             <Link
               to="/checkout"
-              className="w-full bg-white text-black font-bold uppercase tracking-wider text-xs py-4 rounded hover:bg-zinc-200 transition-colors flex items-center justify-center gap-2"
+              className="w-full bg-primary text-background font-bold uppercase tracking-wider text-xs py-4 rounded hover:opacity-90 transition-colors flex items-center justify-center gap-2"
             >
               Proceed to Checkout <ArrowRight size={14} />
             </Link>

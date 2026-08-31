@@ -61,10 +61,10 @@ const AdminOrders = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'DELIVERED': return 'text-emerald-400 border-emerald-500/20 bg-emerald-500/10';
-      case 'CANCELLED': return 'text-red-400 border-red-500/20 bg-red-500/10';
-      case 'SHIPPED': return 'text-blue-400 border-blue-500/20 bg-blue-500/10';
-      default: return 'text-amber-400 border-amber-500/20 bg-amber-500/10';
+      case 'DELIVERED': return 'text-emerald-600 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/10';
+      case 'CANCELLED': return 'text-red-600 dark:text-red-400 border-red-500/30 bg-red-500/10';
+      case 'SHIPPED': return 'text-blue-600 dark:text-blue-400 border-blue-500/30 bg-blue-500/10';
+      default: return 'text-amber-600 dark:text-amber-400 border-amber-500/30 bg-amber-500/10';
     }
   };
 
@@ -75,7 +75,7 @@ const AdminOrders = () => {
     <AdminLayout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-2xl font-bold font-display uppercase tracking-wider text-white">Orders Manager</h1>
+          <h1 className="text-2xl font-bold font-display uppercase tracking-wider text-primary">Orders Manager</h1>
           <p className="text-xs text-secondary mt-1">Track payments, shipping statuses and order histories</p>
         </div>
 
@@ -88,22 +88,22 @@ const AdminOrders = () => {
               placeholder="Search by ID, name, phone..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-surface text-white border border-border rounded pl-10 pr-4 py-2 text-xs focus:outline-none focus:border-white"
+              className="w-full bg-surface text-primary border border-border rounded pl-10 pr-4 py-2 text-xs focus:outline-none focus:border-primary"
             />
           </div>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-surface text-secondary hover:text-white border border-border rounded px-3 py-2 text-xs focus:outline-none focus:border-white w-full sm:w-auto cursor-pointer"
+            className="bg-surface text-secondary hover:text-primary border border-border rounded px-3 py-2 text-xs focus:outline-none focus:border-primary w-full sm:w-auto cursor-pointer"
           >
-            <option value="" className="bg-[#111111] text-white">All Statuses</option>
-            <option value="PENDING" className="bg-[#111111] text-white">Pending</option>
-            <option value="CONFIRMED" className="bg-[#111111] text-white">Confirmed</option>
-            <option value="PROCESSING" className="bg-[#111111] text-white">Processing</option>
-            <option value="SHIPPED" className="bg-[#111111] text-white">Shipped</option>
-            <option value="DELIVERED" className="bg-[#111111] text-white">Delivered</option>
-            <option value="CANCELLED" className="bg-[#111111] text-white">Cancelled</option>
+            <option value="" className="bg-surface text-primary">All Statuses</option>
+            <option value="PENDING" className="bg-surface text-primary">Pending</option>
+            <option value="CONFIRMED" className="bg-surface text-primary">Confirmed</option>
+            <option value="PROCESSING" className="bg-surface text-primary">Processing</option>
+            <option value="SHIPPED" className="bg-surface text-primary">Shipped</option>
+            <option value="DELIVERED" className="bg-surface text-primary">Delivered</option>
+            <option value="CANCELLED" className="bg-surface text-primary">Cancelled</option>
           </select>
         </div>
 
@@ -115,10 +115,10 @@ const AdminOrders = () => {
         ) : (
           <div>
             {/* Desktop Table View */}
-            <div className="hidden lg:block bg-surface border border-border rounded-lg overflow-x-auto">
+            <div className="hidden lg:block bg-surface border border-border rounded-lg overflow-x-auto shadow-sm">
               <table className="w-full text-left border-collapse min-w-[850px]">
                 <thead>
-                  <tr className="border-b border-border bg-[#161616]/30 text-[10px] font-bold text-secondary uppercase tracking-wider">
+                  <tr className="border-b border-border bg-background/50 text-[10px] font-bold text-secondary uppercase tracking-wider">
                     <th className="p-4 pl-6">Order ID</th>
                     <th className="p-4">Customer Details</th>
                     <th className="p-4">Payment</th>
@@ -130,9 +130,9 @@ const AdminOrders = () => {
                 </thead>
                 <tbody className="text-xs divide-y divide-border/40">
                   {filteredOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-[#161616]/10 transition-colors">
+                    <tr key={order.id} className="hover:bg-background/40 transition-colors">
                       {/* ID & Date */}
-                      <td className="p-4 pl-6 font-mono text-white/80">
+                      <td className="p-4 pl-6 font-mono text-primary">
                         {order.id}
                         <span className="text-[9px] text-secondary block font-sans mt-0.5">
                           {new Date(order.createdAt).toLocaleDateString('en-IN', {
@@ -145,14 +145,14 @@ const AdminOrders = () => {
 
                       {/* Customer Info */}
                       <td className="p-4">
-                        <span className="font-semibold text-white block">{order.customerName}</span>
+                        <span className="font-semibold text-primary block">{order.customerName}</span>
                         <span className="text-secondary block mt-0.5">{order.phone}</span>
                       </td>
 
                       {/* Payment Status */}
                       <td className="p-4">
                         <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${
-                          order.paymentStatus === 'PAID' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                          order.paymentStatus === 'PAID' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30' : 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/30'
                         }`}>
                           {order.paymentStatus}
                         </span>
@@ -160,7 +160,7 @@ const AdminOrders = () => {
 
                       {/* Total paid */}
                       <td className="p-4">
-                        <span className="font-semibold text-white">{formatPrice(order.totalAmount)}</span>
+                        <span className="font-semibold text-primary">{formatPrice(order.totalAmount)}</span>
                       </td>
 
                       {/* Order Status Display */}
@@ -175,14 +175,14 @@ const AdminOrders = () => {
                         <select
                           value={order.orderStatus}
                           onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                          className="bg-background text-secondary hover:text-white border border-border rounded px-2 py-1 focus:outline-none focus:border-white cursor-pointer"
+                          className="bg-background text-secondary hover:text-primary border border-border rounded px-2 py-1 focus:outline-none focus:border-primary cursor-pointer"
                         >
-                          <option value="PENDING" className="bg-[#0a0a0a] text-white">Pending</option>
-                          <option value="CONFIRMED" className="bg-[#0a0a0a] text-white">Confirmed</option>
-                          <option value="PROCESSING" className="bg-[#0a0a0a] text-white">Processing</option>
-                          <option value="SHIPPED" className="bg-[#0a0a0a] text-white">Shipped</option>
-                          <option value="DELIVERED" className="bg-[#0a0a0a] text-white">Delivered</option>
-                          <option value="CANCELLED" className="bg-[#0a0a0a] text-white">Cancelled</option>
+                          <option value="PENDING" className="bg-surface text-primary">Pending</option>
+                          <option value="CONFIRMED" className="bg-surface text-primary">Confirmed</option>
+                          <option value="PROCESSING" className="bg-surface text-primary">Processing</option>
+                          <option value="SHIPPED" className="bg-surface text-primary">Shipped</option>
+                          <option value="DELIVERED" className="bg-surface text-primary">Delivered</option>
+                          <option value="CANCELLED" className="bg-surface text-primary">Cancelled</option>
                         </select>
                       </td>
 
@@ -190,7 +190,7 @@ const AdminOrders = () => {
                       <td className="p-4 pr-6 text-right">
                         <button
                           onClick={() => setSelectedOrder(order)}
-                          className="text-secondary hover:text-white"
+                          className="text-secondary hover:text-primary cursor-pointer"
                         >
                           <Eye size={16} />
                         </button>
@@ -204,11 +204,11 @@ const AdminOrders = () => {
             {/* Mobile Card View */}
             <div className="grid grid-cols-1 gap-4 lg:hidden">
               {filteredOrders.map((order) => (
-                <div key={order.id} className="bg-surface border border-border rounded-lg p-4 space-y-3">
+                <div key={order.id} className="bg-surface border border-border rounded-lg p-4 space-y-3 shadow-sm">
                   <div className="flex justify-between items-start">
                     <div>
                       <span className="text-[10px] text-secondary font-mono block">Order ID</span>
-                      <span className="font-mono text-xs text-white/80">{order.id}</span>
+                      <span className="font-mono text-xs text-primary">{order.id}</span>
                       <span className="text-[9px] text-secondary block mt-0.5">
                         {new Date(order.createdAt).toLocaleDateString('en-IN', {
                           day: 'numeric',
@@ -219,7 +219,7 @@ const AdminOrders = () => {
                     </div>
                     <button
                       onClick={() => setSelectedOrder(order)}
-                      className="p-2 bg-white/5 border border-border rounded hover:bg-white/10 text-white"
+                      className="p-2 bg-background border border-border rounded hover:bg-surface text-primary cursor-pointer"
                       title="View Details"
                     >
                       <Eye size={14} />
@@ -229,14 +229,14 @@ const AdminOrders = () => {
                   <div className="border-t border-border/40 pt-2 grid grid-cols-2 gap-2 text-xs">
                     <div>
                       <span className="text-secondary text-[10px] block">Customer</span>
-                      <span className="font-semibold text-white block">{order.customerName}</span>
+                      <span className="font-semibold text-primary block">{order.customerName}</span>
                       <span className="text-secondary text-[10px] block mt-0.5">{order.phone}</span>
                     </div>
                     <div>
                       <span className="text-secondary text-[10px] block">Amount</span>
-                      <span className="font-semibold text-white block">{formatPrice(order.totalAmount)}</span>
+                      <span className="font-semibold text-primary block">{formatPrice(order.totalAmount)}</span>
                       <span className={`inline-block px-1.5 py-0.5 rounded text-[8px] font-bold uppercase mt-1 ${
-                        order.paymentStatus === 'PAID' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                        order.paymentStatus === 'PAID' ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30' : 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/30'
                       }`}>
                         {order.paymentStatus}
                       </span>
@@ -255,14 +255,14 @@ const AdminOrders = () => {
                       <select
                         value={order.orderStatus}
                         onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                        className="w-full xs:w-auto bg-background text-secondary hover:text-white border border-border rounded px-2 py-1 text-xs focus:outline-none focus:border-white cursor-pointer"
+                        className="w-full xs:w-auto bg-background text-secondary hover:text-primary border border-border rounded px-2 py-1 text-xs focus:outline-none focus:border-primary cursor-pointer"
                       >
-                        <option value="PENDING" className="bg-[#0a0a0a] text-white">Pending</option>
-                        <option value="CONFIRMED" className="bg-[#0a0a0a] text-white">Confirmed</option>
-                        <option value="PROCESSING" className="bg-[#0a0a0a] text-white">Processing</option>
-                        <option value="SHIPPED" className="bg-[#0a0a0a] text-white">Shipped</option>
-                        <option value="DELIVERED" className="bg-[#0a0a0a] text-white">Delivered</option>
-                        <option value="CANCELLED" className="bg-[#0a0a0a] text-white">Cancelled</option>
+                        <option value="PENDING" className="bg-surface text-primary">Pending</option>
+                        <option value="CONFIRMED" className="bg-surface text-primary">Confirmed</option>
+                        <option value="PROCESSING" className="bg-surface text-primary">Processing</option>
+                        <option value="SHIPPED" className="bg-surface text-primary">Shipped</option>
+                        <option value="DELIVERED" className="bg-surface text-primary">Delivered</option>
+                        <option value="CANCELLED" className="bg-surface text-primary">Cancelled</option>
                       </select>
                     </div>
                   </div>
@@ -276,15 +276,15 @@ const AdminOrders = () => {
       {/* Order Details Modal Overlay */}
       {selectedOrder && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-surface border border-border rounded-lg max-w-lg w-full p-6 space-y-6 max-h-[90vh] overflow-y-auto relative">
+          <div className="bg-surface border border-border rounded-lg max-w-lg w-full p-6 space-y-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-sm font-bold uppercase tracking-wider text-white">Order Invoice details</h3>
+                <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Order Invoice details</h3>
                 <span className="text-[10px] text-secondary font-mono mt-1 block">ID: {selectedOrder.id}</span>
               </div>
               <button
                 onClick={() => setSelectedOrder(null)}
-                className="text-secondary hover:text-white text-xs font-semibold uppercase tracking-wider"
+                className="text-secondary hover:text-primary text-xs font-semibold uppercase tracking-wider cursor-pointer"
               >
                 Close
               </button>
@@ -292,8 +292,8 @@ const AdminOrders = () => {
 
             {/* Address fields */}
             <div className="text-xs text-secondary space-y-1 bg-background/50 p-4 border border-border rounded">
-              <span className="font-bold text-white uppercase tracking-wider block mb-2">Delivery Address</span>
-              <p className="font-medium text-white">{selectedOrder.customerName}</p>
+              <span className="font-bold text-primary uppercase tracking-wider block mb-2">Delivery Address</span>
+              <p className="font-medium text-primary">{selectedOrder.customerName}</p>
               <p>{selectedOrder.address}</p>
               <p>{selectedOrder.city}, {selectedOrder.state} - {selectedOrder.pincode}</p>
               <p>Phone: {selectedOrder.phone}</p>
@@ -302,14 +302,14 @@ const AdminOrders = () => {
 
             {/* Ordered Items list */}
             <div className="space-y-3">
-              <span className="text-xs font-bold uppercase text-white tracking-wider block">Ordered Posters</span>
+              <span className="text-xs font-bold uppercase text-primary tracking-wider block">Ordered Posters</span>
               {selectedOrder.items?.map((item) => (
                 <div key={item.id} className="flex justify-between text-xs items-center">
                   <span className="text-secondary">
                     {item.productName} {item.selectedSize ? `(${item.selectedSize})` : ''}{' '}
-                    <span className="text-white font-medium">x{item.quantity}</span>
+                    <span className="text-primary font-medium">x{item.quantity}</span>
                   </span>
-                  <span className="text-white font-semibold">{formatPrice(item.price * item.quantity)}</span>
+                  <span className="text-primary font-semibold">{formatPrice(item.price * item.quantity)}</span>
                 </div>
               ))}
             </div>
@@ -323,19 +323,19 @@ const AdminOrders = () => {
                  <select
                   value={selectedOrder.orderStatus}
                   onChange={(e) => handleStatusChange(selectedOrder.id, e.target.value)}
-                  className="bg-background text-white border border-border rounded px-3 py-1.5 focus:outline-none cursor-pointer"
+                  className="bg-background text-primary border border-border rounded px-3 py-1.5 focus:outline-none cursor-pointer"
                 >
-                  <option value="PENDING" className="bg-[#0a0a0a] text-white">Pending</option>
-                  <option value="CONFIRMED" className="bg-[#0a0a0a] text-white">Confirmed</option>
-                  <option value="PROCESSING" className="bg-[#0a0a0a] text-white">Processing</option>
-                  <option value="SHIPPED" className="bg-[#0a0a0a] text-white">Shipped</option>
-                  <option value="DELIVERED" className="bg-[#0a0a0a] text-white">Delivered</option>
-                  <option value="CANCELLED" className="bg-[#0a0a0a] text-white">Cancelled</option>
+                  <option value="PENDING" className="bg-surface text-primary">Pending</option>
+                  <option value="CONFIRMED" className="bg-surface text-primary">Confirmed</option>
+                  <option value="PROCESSING" className="bg-surface text-primary">Processing</option>
+                  <option value="SHIPPED" className="bg-surface text-primary">Shipped</option>
+                  <option value="DELIVERED" className="bg-surface text-primary">Delivered</option>
+                  <option value="CANCELLED" className="bg-surface text-primary">Cancelled</option>
                 </select>
               </div>
               <div className="text-right">
                 <span className="text-secondary block">Total Paid:</span>
-                <span className="text-sm font-bold text-white block mt-0.5">{formatPrice(selectedOrder.totalAmount)}</span>
+                <span className="text-sm font-bold text-primary block mt-0.5">{formatPrice(selectedOrder.totalAmount)}</span>
               </div>
             </div>
           </div>

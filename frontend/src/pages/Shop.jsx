@@ -62,7 +62,8 @@ const Shop = () => {
   };
 
   const categories = [
-    { name: 'All Posters', slug: '' },
+    { name: 'All Products', slug: '' },
+    { name: 'Stickers', slug: 'stickers' },
     { name: 'Anime', slug: 'anime' },
     { name: 'Bollywood', slug: 'bollywood' },
     { name: 'Aesthetic', slug: 'aesthetic' },
@@ -76,12 +77,12 @@ const Shop = () => {
         {/* Header Title */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-border pb-6 mb-8 gap-4">
           <div>
-            <h1 className="text-3xl font-bold font-display text-white uppercase tracking-wider">
-              {categoryParam ? `${categoryParam} Posters` : 'Shop All Posters'}
+            <h1 className="text-3xl font-bold font-display text-primary uppercase tracking-wider">
+              {categoryParam ? `${categoryParam}` : 'Shop All Catalog'}
             </h1>
             {searchParam && (
               <p className="text-xs text-secondary mt-1">
-                Showing results for "<span className="text-white font-semibold">{searchParam}</span>"
+                Showing results for "<span className="text-primary font-semibold">{searchParam}</span>"
               </p>
             )}
           </div>
@@ -90,7 +91,7 @@ const Shop = () => {
           <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end">
             <button
               onClick={() => setMobileFiltersOpen(true)}
-              className="md:hidden flex items-center gap-1.5 border border-border px-4 py-2 rounded text-sm text-secondary hover:text-white"
+              className="md:hidden flex items-center gap-1.5 border border-border px-4 py-2 rounded text-sm text-secondary hover:text-primary"
             >
               <SlidersHorizontal size={14} /> Filters
             </button>
@@ -99,12 +100,12 @@ const Shop = () => {
               <select
                 value={sortParam}
                 onChange={(e) => updateFilters('sort', e.target.value)}
-                className="bg-surface text-secondary hover:text-white border border-border rounded px-3 py-2 text-sm focus:outline-none focus:border-white cursor-pointer"
+                className="bg-surface text-secondary hover:text-primary border border-border rounded px-3 py-2 text-sm focus:outline-none focus:border-primary cursor-pointer"
               >
-                <option value="featured" className="bg-[#111111] text-white">Featured</option>
-                <option value="newest" className="bg-[#111111] text-white">Newest</option>
-                <option value="price_asc" className="bg-[#111111] text-white">Price: Low to High</option>
-                <option value="price_desc" className="bg-[#111111] text-white">Price: High to Low</option>
+                <option value="featured" className="bg-surface text-primary">Featured</option>
+                <option value="newest" className="bg-surface text-primary">Newest</option>
+                <option value="price_asc" className="bg-surface text-primary">Price: Low to High</option>
+                <option value="price_desc" className="bg-surface text-primary">Price: High to Low</option>
               </select>
             </div>
           </div>
@@ -114,7 +115,7 @@ const Shop = () => {
           {/* Desktop Sidebar Filters */}
           <aside className="hidden md:block space-y-6 sticky top-24">
             <div>
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-3">Categories</h3>
+              <h3 className="text-xs font-bold text-primary uppercase tracking-wider mb-3">Categories</h3>
               <div className="flex flex-col space-y-2">
                 {categories.map((cat) => (
                   <button
@@ -122,8 +123,8 @@ const Shop = () => {
                     onClick={() => updateFilters('category', cat.slug)}
                     className={`text-left text-sm py-1 transition-all duration-150 ${
                       categoryParam === cat.slug
-                        ? 'text-white font-semibold pl-1.5 border-l-2 border-white'
-                        : 'text-secondary hover:text-white'
+                        ? 'text-primary font-semibold pl-1.5 border-l-2 border-primary'
+                        : 'text-secondary hover:text-primary'
                     }`}
                   >
                     {cat.name}
@@ -136,14 +137,14 @@ const Shop = () => {
 
             {/* Price Filter */}
             <div>
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Price Range</h3>
+              <h3 className="text-xs font-bold text-primary uppercase tracking-wider mb-4">Price Range</h3>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
                   placeholder="Min"
                   value={minPriceParam}
                   onChange={(e) => updateFilters('minPrice', e.target.value)}
-                  className="bg-surface text-white border border-border rounded px-3 py-1.5 text-xs w-full focus:outline-none focus:border-white"
+                  className="bg-surface text-primary border border-border rounded px-3 py-1.5 text-xs w-full focus:outline-none focus:border-primary"
                 />
                 <span className="text-secondary">-</span>
                 <input
@@ -151,7 +152,7 @@ const Shop = () => {
                   placeholder="Max"
                   value={maxPriceParam}
                   onChange={(e) => updateFilters('maxPrice', e.target.value)}
-                  className="bg-surface text-white border border-border rounded px-3 py-1.5 text-xs w-full focus:outline-none focus:border-white"
+                  className="bg-surface text-primary border border-border rounded px-3 py-1.5 text-xs w-full focus:outline-none focus:border-primary"
                 />
               </div>
             </div>
@@ -165,16 +166,16 @@ const Shop = () => {
                   type="checkbox"
                   checked={inStockParam}
                   onChange={(e) => updateFilters('inStock', e.target.checked ? 'true' : '')}
-                  className="rounded bg-surface border-border text-white focus:ring-0 focus:ring-offset-0 h-4 w-4"
+                  className="rounded bg-surface border-border text-primary focus:ring-0 focus:ring-offset-0 h-4 w-4"
                 />
-                <span className="text-sm text-secondary hover:text-white select-none">In Stock Only</span>
+                <span className="text-sm text-secondary hover:text-primary select-none">In Stock Only</span>
               </label>
             </div>
 
             {(categoryParam || searchParam || minPriceParam || maxPriceParam || inStockParam) && (
               <button
                 onClick={clearFilters}
-                className="w-full text-xs font-bold bg-white text-black py-2 rounded uppercase tracking-wider hover:bg-zinc-200 transition-colors"
+                className="w-full text-xs font-bold bg-primary text-background py-2 rounded uppercase tracking-wider hover:opacity-90 transition-colors"
               >
                 Clear Filters
               </button>
@@ -197,15 +198,15 @@ const Shop = () => {
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end">
           <div className="w-80 bg-surface border-l border-border h-full flex flex-col p-6 overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-lg font-bold text-white uppercase tracking-wider">Filters</h2>
-              <button onClick={() => setMobileFiltersOpen(false)} className="text-secondary hover:text-white">
+              <h2 className="text-lg font-bold text-primary uppercase tracking-wider">Filters</h2>
+              <button onClick={() => setMobileFiltersOpen(false)} className="text-secondary hover:text-primary">
                 <X size={20} />
               </button>
             </div>
 
             <div className="flex-grow space-y-6">
               <div>
-                <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-3">Categories</h3>
+                <h3 className="text-xs font-bold text-primary uppercase tracking-wider mb-3">Categories</h3>
                 <div className="flex flex-col space-y-2">
                   {categories.map((cat) => (
                     <button
@@ -215,7 +216,7 @@ const Shop = () => {
                         setMobileFiltersOpen(false);
                       }}
                       className={`text-left text-sm py-1.5 ${
-                        categoryParam === cat.slug ? 'text-white font-semibold' : 'text-secondary'
+                        categoryParam === cat.slug ? 'text-primary font-semibold' : 'text-secondary'
                       }`}
                     >
                       {cat.name}
@@ -227,14 +228,14 @@ const Shop = () => {
               <hr className="border-border" />
 
               <div>
-                <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-4">Price Range</h3>
+                <h3 className="text-xs font-bold text-primary uppercase tracking-wider mb-4">Price Range</h3>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
                     placeholder="Min"
                     value={minPriceParam}
                     onChange={(e) => updateFilters('minPrice', e.target.value)}
-                    className="bg-[#1a1a1a] text-white border border-border rounded px-3 py-2 text-sm w-full"
+                    className="bg-background text-primary border border-border rounded px-3 py-2 text-sm w-full"
                   />
                   <span className="text-secondary">-</span>
                   <input
@@ -242,7 +243,7 @@ const Shop = () => {
                     placeholder="Max"
                     value={maxPriceParam}
                     onChange={(e) => updateFilters('maxPrice', e.target.value)}
-                    className="bg-[#1a1a1a] text-white border border-border rounded px-3 py-2 text-sm w-full"
+                    className="bg-background text-primary border border-border rounded px-3 py-2 text-sm w-full"
                   />
                 </div>
               </div>
@@ -255,7 +256,7 @@ const Shop = () => {
                     type="checkbox"
                     checked={inStockParam}
                     onChange={(e) => updateFilters('inStock', e.target.checked ? 'true' : '')}
-                    className="rounded bg-[#1a1a1a] border-border text-white h-4 w-4"
+                    className="rounded bg-background border-border text-primary h-4 w-4"
                   />
                   <span className="text-sm text-secondary">In Stock Only</span>
                 </label>
@@ -265,7 +266,7 @@ const Shop = () => {
             <div className="pt-6 space-y-3">
               <button
                 onClick={() => setMobileFiltersOpen(false)}
-                className="w-full bg-white text-black py-3 rounded uppercase font-semibold text-xs tracking-wider"
+                className="w-full bg-primary text-background py-3 rounded uppercase font-semibold text-xs tracking-wider"
               >
                 Apply Filters
               </button>
@@ -275,7 +276,7 @@ const Shop = () => {
                     clearFilters();
                     setMobileFiltersOpen(false);
                   }}
-                  className="w-full border border-border text-white py-3 rounded uppercase font-semibold text-xs tracking-wider"
+                  className="w-full border border-border text-primary py-3 rounded uppercase font-semibold text-xs tracking-wider"
                 >
                   Clear All
                 </button>
