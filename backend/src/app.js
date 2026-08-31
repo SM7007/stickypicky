@@ -8,7 +8,8 @@ const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
+const paymentRoutes  = require('./routes/paymentRoutes');
+const settingsRoutes = require('./routes/settingsRoutes');
 const { errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
@@ -43,6 +44,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/settings', settingsRoutes);
 
 // ── 404 Handler ──────────────────────────────────────────
 app.use((req, res) => {

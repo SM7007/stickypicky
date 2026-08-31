@@ -1,7 +1,8 @@
 const Razorpay = require('razorpay');
-const crypto = require('crypto');
-const prisma = require('../config/db');
+const crypto   = require('crypto');
+const prisma   = require('../config/db');
 const { createError } = require('../middleware/errorMiddleware');
+const { getOrCreateSettings } = require('./settingsController');
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -50,7 +51,8 @@ const createPaymentOrder = async (req, res, next) => {
       subtotal += price * item.quantity;
     }
 
-    const deliveryCharge = subtotal >= 500 ? 0 : 49;
+    const settings = await getOrCreateSettings();
+    const deliveryCharge = subtotal >= settings.freeDeliveryAbove ? 0 : settings.deliveryCharge;
     const totalAmount = subtotal + deliveryCharge;
     const amountInPaise = Math.round(totalAmount * 100);
 
@@ -137,7 +139,8 @@ const verifyPayment = async (req, res, next) => {
       subtotal += price * item.quantity;
     }
 
-    const deliveryCharge = subtotal >= 500 ? 0 : 49;
+    const settings = await getOrCreateSettings();
+    const deliveryCharge = subtotal >= settings.freeDeliveryAbove ? 0 : settings.deliveryCharge;
     const totalAmount = subtotal + deliveryCharge;
 
     // ── Check for duplicate payment ────────────────────────

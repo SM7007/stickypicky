@@ -1,4 +1,5 @@
 const prisma = require('../config/db');
+const { getOrCreateSettings } = require('./settingsController');
 const { createError } = require('../middleware/errorMiddleware');
 
 // Cart is stored in DB per user session (server-side cart)
@@ -64,7 +65,8 @@ const validateCart = async (req, res, next) => {
       subtotal += price * item.quantity;
     }
 
-    const deliveryCharge = subtotal >= 500 ? 0 : 49;
+    const settings = await getOrCreateSettings();
+    const deliveryCharge = subtotal >= settings.freeDeliveryAbove ? 0 : settings.deliveryCharge;
     const total = subtotal + deliveryCharge;
 
     res.json({ items: validatedItems, subtotal, deliveryCharge, total });

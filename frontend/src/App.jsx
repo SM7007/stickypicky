@@ -23,6 +23,7 @@ import AdminProducts from './pages/admin/AdminProducts';
 import AdminAddProduct from './pages/admin/AdminAddProduct';
 import AdminEditProduct from './pages/admin/AdminEditProduct';
 import AdminOrders from './pages/admin/AdminOrders';
+import AdminSettings from './pages/admin/AdminSettings';
 
 // Route guards
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -95,6 +96,14 @@ function App() {
               element={
                 <ProtectedRoute adminOnly>
                   <AdminOrders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/settings"
+              element={
+                <ProtectedRoute adminOnly>
+                  <AdminSettings />
                 </ProtectedRoute>
               }
             />

@@ -15,6 +15,14 @@ enum Role {
   ADMIN
 }
 
+model Settings {
+  id                  String   @id @default("site_settings")
+  deliveryCharge      Float    @default(49)
+  freeDeliveryAbove   Float    @default(500)
+  updatedAt           DateTime @updatedAt
+}
+
+
 enum PaymentStatus {
   PENDING
   PAID

@@ -107,73 +107,150 @@ const AdminOrders = () => {
           </select>
         </div>
 
-        {/* Orders Table */}
-        {filteredOrders.length === 0 ? (
-          <div className="text-center py-16 border border-dashed border-border rounded-lg bg-surface">
-            <p className="text-secondary text-sm">No orders matching the criteria.</p>
-          </div>
         ) : (
-          <div className="bg-surface border border-border rounded-lg overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[850px]">
-              <thead>
-                <tr className="border-b border-border bg-[#161616]/30 text-[10px] font-bold text-secondary uppercase tracking-wider">
-                  <th className="p-4 pl-6">Order ID</th>
-                  <th className="p-4">Customer Details</th>
-                  <th className="p-4">Payment</th>
-                  <th className="p-4">Total Paid</th>
-                  <th className="p-4">Order Status</th>
-                  <th className="p-4">Update Status</th>
-                  <th className="p-4 pr-6 text-right font-semibold">View</th>
-                </tr>
-              </thead>
-              <tbody className="text-xs divide-y divide-border/40">
-                {filteredOrders.map((order) => (
-                  <tr key={order.id} className="hover:bg-[#161616]/10 transition-colors">
-                    {/* ID & Date */}
-                    <td className="p-4 pl-6 font-mono text-white/80">
-                      {order.id}
-                      <span className="text-[9px] text-secondary block font-sans mt-0.5">
+          <div>
+            {/* Desktop Table View */}
+            <div className="hidden lg:block bg-surface border border-border rounded-lg overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[850px]">
+                <thead>
+                  <tr className="border-b border-border bg-[#161616]/30 text-[10px] font-bold text-secondary uppercase tracking-wider">
+                    <th className="p-4 pl-6">Order ID</th>
+                    <th className="p-4">Customer Details</th>
+                    <th className="p-4">Payment</th>
+                    <th className="p-4">Total Paid</th>
+                    <th className="p-4">Order Status</th>
+                    <th className="p-4">Update Status</th>
+                    <th className="p-4 pr-6 text-right font-semibold">View</th>
+                  </tr>
+                </thead>
+                <tbody className="text-xs divide-y divide-border/40">
+                  {filteredOrders.map((order) => (
+                    <tr key={order.id} className="hover:bg-[#161616]/10 transition-colors">
+                      {/* ID & Date */}
+                      <td className="p-4 pl-6 font-mono text-white/80">
+                        {order.id}
+                        <span className="text-[9px] text-secondary block font-sans mt-0.5">
+                          {new Date(order.createdAt).toLocaleDateString('en-IN', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric'
+                          })}
+                        </span>
+                      </td>
+
+                      {/* Customer Info */}
+                      <td className="p-4">
+                        <span className="font-semibold text-white block">{order.customerName}</span>
+                        <span className="text-secondary block mt-0.5">{order.phone}</span>
+                      </td>
+
+                      {/* Payment Status */}
+                      <td className="p-4">
+                        <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${
+                          order.paymentStatus === 'PAID' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                        }`}>
+                          {order.paymentStatus}
+                        </span>
+                      </td>
+
+                      {/* Total paid */}
+                      <td className="p-4">
+                        <span className="font-semibold text-white">{formatPrice(order.totalAmount)}</span>
+                      </td>
+
+                      {/* Order Status Display */}
+                      <td className="p-4">
+                        <span className={`px-2 py-0.5 rounded border text-[9px] font-bold uppercase inline-block ${getStatusColor(order.orderStatus)}`}>
+                          {order.orderStatus}
+                        </span>
+                      </td>
+
+                      {/* Update Status Dropdown */}
+                      <td className="p-4">
+                        <select
+                          value={order.orderStatus}
+                          onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                          className="bg-background text-secondary hover:text-white border border-border rounded px-2 py-1 focus:outline-none focus:border-white cursor-pointer"
+                        >
+                          <option value="PENDING" className="bg-[#0a0a0a] text-white">Pending</option>
+                          <option value="CONFIRMED" className="bg-[#0a0a0a] text-white">Confirmed</option>
+                          <option value="PROCESSING" className="bg-[#0a0a0a] text-white">Processing</option>
+                          <option value="SHIPPED" className="bg-[#0a0a0a] text-white">Shipped</option>
+                          <option value="DELIVERED" className="bg-[#0a0a0a] text-white">Delivered</option>
+                          <option value="CANCELLED" className="bg-[#0a0a0a] text-white">Cancelled</option>
+                        </select>
+                      </td>
+
+                      {/* Action View */}
+                      <td className="p-4 pr-6 text-right">
+                        <button
+                          onClick={() => setSelectedOrder(order)}
+                          className="text-secondary hover:text-white"
+                        >
+                          <Eye size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Card View */}
+            <div className="grid grid-cols-1 gap-4 lg:hidden">
+              {filteredOrders.map((order) => (
+                <div key={order.id} className="bg-surface border border-border rounded-lg p-4 space-y-3">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <span className="text-[10px] text-secondary font-mono block">Order ID</span>
+                      <span className="font-mono text-xs text-white/80">{order.id}</span>
+                      <span className="text-[9px] text-secondary block mt-0.5">
                         {new Date(order.createdAt).toLocaleDateString('en-IN', {
                           day: 'numeric',
                           month: 'short',
                           year: 'numeric'
                         })}
                       </span>
-                    </td>
+                    </div>
+                    <button
+                      onClick={() => setSelectedOrder(order)}
+                      className="p-2 bg-white/5 border border-border rounded hover:bg-white/10 text-white"
+                      title="View Details"
+                    >
+                      <Eye size={14} />
+                    </button>
+                  </div>
 
-                    {/* Customer Info */}
-                    <td className="p-4">
+                  <div className="border-t border-border/40 pt-2 grid grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <span className="text-secondary text-[10px] block">Customer</span>
                       <span className="font-semibold text-white block">{order.customerName}</span>
-                      <span className="text-secondary block mt-0.5">{order.phone}</span>
-                    </td>
-
-                    {/* Payment Status */}
-                    <td className="p-4">
-                      <span className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase ${
+                      <span className="text-secondary text-[10px] block mt-0.5">{order.phone}</span>
+                    </div>
+                    <div>
+                      <span className="text-secondary text-[10px] block">Amount</span>
+                      <span className="font-semibold text-white block">{formatPrice(order.totalAmount)}</span>
+                      <span className={`inline-block px-1.5 py-0.5 rounded text-[8px] font-bold uppercase mt-1 ${
                         order.paymentStatus === 'PAID' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
                       }`}>
                         {order.paymentStatus}
                       </span>
-                    </td>
+                    </div>
+                  </div>
 
-                    {/* Total paid */}
-                    <td className="p-4">
-                      <span className="font-semibold text-white">{formatPrice(order.totalAmount)}</span>
-                    </td>
-
-                    {/* Order Status Display */}
-                    <td className="p-4">
+                  <div className="border-t border-border/40 pt-2 flex flex-col xs:flex-row gap-2 justify-between items-start xs:items-center">
+                    <div>
+                      <span className="text-secondary text-[10px] block mb-1">Status</span>
                       <span className={`px-2 py-0.5 rounded border text-[9px] font-bold uppercase inline-block ${getStatusColor(order.orderStatus)}`}>
                         {order.orderStatus}
                       </span>
-                    </td>
-
-                    {/* Update Status Dropdown */}
-                    <td className="p-4">
+                    </div>
+                    <div className="w-full xs:w-auto">
+                      <span className="text-secondary text-[10px] block mb-1">Update Status</span>
                       <select
                         value={order.orderStatus}
                         onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                        className="bg-background text-secondary hover:text-white border border-border rounded px-2 py-1 focus:outline-none focus:border-white cursor-pointer"
+                        className="w-full xs:w-auto bg-background text-secondary hover:text-white border border-border rounded px-2 py-1 text-xs focus:outline-none focus:border-white cursor-pointer"
                       >
                         <option value="PENDING" className="bg-[#0a0a0a] text-white">Pending</option>
                         <option value="CONFIRMED" className="bg-[#0a0a0a] text-white">Confirmed</option>
@@ -182,21 +259,11 @@ const AdminOrders = () => {
                         <option value="DELIVERED" className="bg-[#0a0a0a] text-white">Delivered</option>
                         <option value="CANCELLED" className="bg-[#0a0a0a] text-white">Cancelled</option>
                       </select>
-                    </td>
-
-                    {/* Action View */}
-                    <td className="p-4 pr-6 text-right">
-                      <button
-                        onClick={() => setSelectedOrder(order)}
-                        className="text-secondary hover:text-white"
-                      >
-                        <Eye size={16} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

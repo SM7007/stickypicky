@@ -66,6 +66,7 @@ const AdminDashboard = () => {
           <ul className="text-xs text-secondary space-y-2 list-disc list-inside leading-relaxed">
             <li>Go to <a href="/admin/products" className="text-white hover:underline font-semibold">Products</a> to add, edit or delete posters and manage stocks.</li>
             <li>Go to <a href="/admin/orders" className="text-white hover:underline font-semibold">Orders</a> to view details of customer purchases and confirm/ship products.</li>
+            <li>Go to <a href="/admin/settings" className="text-white hover:underline font-semibold">Delivery Settings</a> to configure delivery charges and free delivery threshold.</li>
             <li>Prices configured inside product size variants are matched dynamically during Razorpay verification checks.</li>
             <li>Images uploaded are hosted instantly in Cloudinary.</li>
           </ul>
