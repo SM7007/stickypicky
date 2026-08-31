@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { SettingsProvider } from './context/SettingsContext';
 import { Toaster } from 'react-hot-toast';
 
 // Customer Pages
@@ -31,8 +32,9 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 function App() {
   return (
     <AuthProvider>
-      <CartProvider>
-        <Router>
+      <SettingsProvider>
+        <CartProvider>
+          <Router>
           <Routes>
             {/* Customer Routes */}
             <Route path="/" element={<Home />} />
@@ -121,7 +123,8 @@ function App() {
             },
           }}
         />
-      </CartProvider>
+        </CartProvider>
+      </SettingsProvider>
     </AuthProvider>
   );
 }

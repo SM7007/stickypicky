@@ -7,12 +7,14 @@ import { formatPrice } from '../utils/formatPrice';
 import { Plus, Minus, ShoppingBag, Truck, Undo, ShieldCheck } from 'lucide-react';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorMessage from '../components/common/ErrorMessage';
+import { useSettings } from '../hooks/useSettings';
 import toast from 'react-hot-toast';
 
 const ProductDetail = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { settings } = useSettings();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -222,7 +224,7 @@ const ProductDetail = () => {
             {/* Selling propositions */}
             <div className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-border">
               <div className="flex items-center gap-2 text-xs text-secondary">
-                <Truck size={14} className="text-white" /> Free Delivery &gt; ₹500
+                <Truck size={14} className="text-white" /> Free Delivery &gt; ₹{settings.freeDeliveryAbove}
               </div>
               <div className="flex items-center gap-2 text-xs text-secondary">
                 <Undo size={14} className="text-white" /> Easy 7-Day Returns

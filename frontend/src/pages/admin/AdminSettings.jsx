@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
 import AdminLayout from '../../layouts/AdminLayout';
+import { useSettings } from '../../hooks/useSettings';
 
 export default function AdminSettings() {
+  const { refetchSettings } = useSettings();
   const [deliveryCharge, setDeliveryCharge]     = useState('');
   const [freeDeliveryAbove, setFreeDeliveryAbove] = useState('');
   const [loading, setLoading]   = useState(true);
@@ -28,6 +30,7 @@ export default function AdminSettings() {
         deliveryCharge:    parseFloat(deliveryCharge),
         freeDeliveryAbove: parseFloat(freeDeliveryAbove),
       });
+      await refetchSettings();
       setSuccess('✅ Delivery settings saved successfully!');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to save settings.');

@@ -2,13 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import { useCart } from '../hooks/useCart';
+import { useSettings } from '../hooks/useSettings';
 import { formatPrice } from '../utils/formatPrice';
 import { Trash2, Plus, Minus, ArrowLeft, ArrowRight } from 'lucide-react';
 
 const Cart = () => {
   const { cartItems, updateQuantity, removeFromCart, subtotal } = useCart();
+  const { settings } = useSettings();
 
-  const deliveryCharge = subtotal >= 500 || subtotal === 0 ? 0 : 49;
+  const deliveryCharge = subtotal >= settings.freeDeliveryAbove || subtotal === 0 ? 0 : settings.deliveryCharge;
   const total = subtotal + deliveryCharge;
 
   if (cartItems.length === 0) {
@@ -118,7 +120,7 @@ const Cart = () => {
               </div>
               {deliveryCharge > 0 && (
                 <p className="text-[10px] text-amber-500 font-medium">
-                  Add {formatPrice(500 - subtotal)} more for free delivery.
+                  Add {formatPrice(settings.freeDeliveryAbove - subtotal)} more for free delivery.
                 </p>
               )}
               <hr className="border-border" />

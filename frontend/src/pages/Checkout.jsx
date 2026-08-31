@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import { useCart } from '../hooks/useCart';
 import { useAuth } from '../hooks/useAuth';
+import { useSettings } from '../hooks/useSettings';
 import { formatPrice } from '../utils/formatPrice';
 import api from '../services/api';
 import toast from 'react-hot-toast';
@@ -11,6 +12,7 @@ import { ShieldCheck } from 'lucide-react';
 const Checkout = () => {
   const { cartItems, subtotal, clearCart } = useCart();
   const { user } = useAuth();
+  const { settings } = useSettings();
   const navigate = useNavigate();
 
   // Delivery details form state
@@ -53,7 +55,7 @@ const Checkout = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const deliveryCharge = subtotal >= 500 ? 0 : 49;
+  const deliveryCharge = subtotal >= settings.freeDeliveryAbove ? 0 : settings.deliveryCharge;
   const total = subtotal + deliveryCharge;
 
   const handlePayment = async (e) => {

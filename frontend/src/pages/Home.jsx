@@ -6,8 +6,10 @@ import ProductGrid from '../components/product/ProductGrid';
 import { ArrowRight, Sparkles, Truck, ShieldCheck, Heart } from 'lucide-react';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorMessage from '../components/common/ErrorMessage';
+import { useSettings } from '../hooks/useSettings';
 
 const Home = () => {
+  const { settings } = useSettings();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -97,7 +99,7 @@ const Home = () => {
               <Truck className="h-6 w-6 text-white" />
               <div>
                 <h4 className="text-sm font-bold uppercase tracking-wider text-white">Free & Fast Shipping</h4>
-                <p className="text-xs text-secondary mt-1">Free delivery all over India for orders above ₹500.</p>
+                <p className="text-xs text-secondary mt-1">Free delivery all over India for orders above ₹{settings.freeDeliveryAbove}.</p>
               </div>
             </div>
             <div className="flex flex-col md:flex-row items-center gap-4 px-4 border-y md:border-y-0 md:border-x border-border py-6 md:py-0">
