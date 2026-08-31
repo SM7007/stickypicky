@@ -1,9 +1,18 @@
 import axios from 'axios';
 
 const getBaseURL = () => {
+  // Always prefer explicit env variable (set this in Vercel frontend project settings)
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
+
   const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-  return `http://${host}:5000/api`;
+
+  // Local IP / LAN access (mobile testing via Wi-Fi) → connect to port 5000
+  const isLocal = /^(localhost|127\.0\.0\.1|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(host);
+  if (isLocal) return `http://${host}:5000/api`;
+
+  // Production / Vercel domain — VITE_API_URL must be set in Vercel dashboard!
+  console.warn('VITE_API_URL is not set. Please configure it in your Vercel frontend project settings.');
+  return '';
 };
 
 const api = axios.create({
