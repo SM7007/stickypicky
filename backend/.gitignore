@@ -41,3 +41,6 @@ desktop.ini
 # IDEs / Editors
 .vscode/
 .idea/
+
+# Local utility scripts
+scripts/
