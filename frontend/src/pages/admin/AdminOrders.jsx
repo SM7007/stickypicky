@@ -107,6 +107,11 @@ const AdminOrders = () => {
           </select>
         </div>
 
+        {/* Orders Table */}
+        {filteredOrders.length === 0 ? (
+          <div className="text-center py-16 border border-dashed border-border rounded-lg bg-surface">
+            <p className="text-secondary text-sm">No orders matching the criteria.</p>
+          </div>
         ) : (
           <div>
             {/* Desktop Table View */}

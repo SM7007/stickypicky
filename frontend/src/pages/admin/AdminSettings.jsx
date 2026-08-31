@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../../services/api';
+import AdminLayout from '../../layouts/AdminLayout';
 
 export default function AdminSettings() {
   const [deliveryCharge, setDeliveryCharge]     = useState('');
@@ -37,14 +38,17 @@ export default function AdminSettings() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500"></div>
-      </div>
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500"></div>
+        </div>
+      </AdminLayout>
     );
   }
 
   return (
-    <div className="max-w-xl mx-auto">
+    <AdminLayout>
+      <div className="max-w-xl mx-auto">
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-white">Delivery Settings</h1>
@@ -116,5 +120,6 @@ export default function AdminSettings() {
         </button>
       </form>
     </div>
+    </AdminLayout>
   );
 }
