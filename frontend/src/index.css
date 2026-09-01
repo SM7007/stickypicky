@@ -15,9 +15,10 @@
   --surface: #111111;
   --border: #1e1e1e;
   --text-primary: #ffffff;
-  --text-secondary: #94a3b8;
+  --text-secondary: #888888;
   --input-bg: #141414;
 }
+
 
 :root[data-theme="light"],
 .light {
