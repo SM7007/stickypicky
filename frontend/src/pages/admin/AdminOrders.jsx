@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import AdminLayout from '../../layouts/AdminLayout';
 import { formatPrice } from '../../utils/formatPrice';
-import { ShoppingBag, Search, Eye } from 'lucide-react';
+import { ShoppingBag, Search, Eye, Trash2 } from 'lucide-react';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorMessage from '../../components/common/ErrorMessage';
 import toast from 'react-hot-toast';
@@ -53,7 +53,20 @@ const AdminOrders = () => {
     }
   };
 
-  const filteredOrders = orders.filter(o => 
+  const handleDeleteOrder = async (orderId) => {
+    if (!window.confirm('Are you sure you want to permanently delete this order? This cannot be undone.')) return;
+    try {
+      await api.delete(`/orders/admin/${orderId}`);
+      toast.success('Order deleted');
+      setOrders(orders.filter(o => o.id !== orderId));
+      if (selectedOrder && selectedOrder.id === orderId) setSelectedOrder(null);
+    } catch (err) {
+      console.error('Failed to delete order', err);
+      toast.error('Could not delete order');
+    }
+  };
+
+  const filteredOrders = orders.filter(o =>
     o.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
     o.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
     o.phone.includes(searchQuery)
@@ -193,12 +206,22 @@ const AdminOrders = () => {
 
                       {/* Action View */}
                       <td className="p-4 pr-6 text-right">
-                        <button
-                          onClick={() => setSelectedOrder(order)}
-                          className="text-secondary hover:text-primary cursor-pointer"
-                        >
-                          <Eye size={16} />
-                        </button>
+                        <div className="flex items-center justify-end gap-3">
+                          <button
+                            onClick={() => setSelectedOrder(order)}
+                            className="text-secondary hover:text-primary cursor-pointer"
+                            title="View details"
+                          >
+                            <Eye size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteOrder(order.id)}
+                            className="text-secondary hover:text-red-500 cursor-pointer transition-colors"
+                            title="Delete order"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -227,13 +250,22 @@ const AdminOrders = () => {
                         </span>
                       )}
                     </div>
-                    <button
-                      onClick={() => setSelectedOrder(order)}
-                      className="p-2 bg-background border border-border rounded hover:bg-surface text-primary cursor-pointer"
-                      title="View Details"
-                    >
-                      <Eye size={14} />
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setSelectedOrder(order)}
+                        className="p-2 bg-background border border-border rounded hover:bg-surface text-primary cursor-pointer"
+                        title="View Details"
+                      >
+                        <Eye size={14} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteOrder(order.id)}
+                        className="p-2 bg-background border border-red-500/30 rounded hover:bg-red-500/10 text-secondary hover:text-red-500 cursor-pointer transition-colors"
+                        title="Delete order"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
                   </div>
 
                   <div className="border-t border-border/40 pt-2 grid grid-cols-2 gap-2 text-xs">
@@ -287,18 +319,27 @@ const AdminOrders = () => {
       {selectedOrder && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-surface border border-border rounded-lg max-w-lg w-full p-6 space-y-6 max-h-[90vh] overflow-y-auto relative shadow-2xl">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Order Invoice details</h3>
-                <span className="text-[10px] text-secondary font-mono mt-1 block">ID: {selectedOrder.id}</span>
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Order Invoice details</h3>
+                  <span className="text-[10px] text-secondary font-mono mt-1 block">ID: {selectedOrder.id}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => handleDeleteOrder(selectedOrder.id)}
+                    className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-red-500 hover:text-red-400 cursor-pointer transition-colors"
+                  >
+                    <Trash2 size={13} />
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => setSelectedOrder(null)}
+                    className="text-secondary hover:text-primary text-xs font-semibold uppercase tracking-wider cursor-pointer"
+                  >
+                    Close
+                  </button>
+                </div>
               </div>
-              <button
-                onClick={() => setSelectedOrder(null)}
-                className="text-secondary hover:text-primary text-xs font-semibold uppercase tracking-wider cursor-pointer"
-              >
-                Close
-              </button>
-            </div>
 
             {/* Address fields */}
             <div className="text-xs text-secondary space-y-1 bg-background/50 p-4 border border-border rounded">

@@ -113,4 +113,20 @@ const getAdminStats = async (req, res, next) => {
   }
 };
 
-module.exports = { getMyOrders, getOrderById, getAdminOrders, updateOrderStatus, getAdminStats };
+// DELETE /api/orders/admin/:id
+const deleteOrder = async (req, res, next) => {
+  try {
+    const order = await prisma.order.findUnique({ where: { id: req.params.id } });
+    if (!order) return next(createError('Order not found', 404));
+
+    // Delete payment record first (if exists), then order (items cascade)
+    await prisma.payment.deleteMany({ where: { orderId: req.params.id } });
+    await prisma.order.delete({ where: { id: req.params.id } });
+
+    res.json({ message: 'Order deleted successfully' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getMyOrders, getOrderById, getAdminOrders, updateOrderStatus, getAdminStats, deleteOrder };
