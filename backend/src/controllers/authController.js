@@ -5,9 +5,8 @@ const { generateToken } = require('../utils/generateToken');
 const { createError } = require('../middleware/errorMiddleware');
 const { sendResetOtpEmail } = require('../utils/emailService');
 
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-
 // POST /api/auth/register
+
 const register = async (req, res, next) => {
   try {
     const { name, email, password, phone } = req.body;
@@ -57,12 +56,14 @@ const googleLogin = async (req, res, next) => {
 
     let payload;
     try {
+      const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
       const ticket = await googleClient.verifyIdToken({
         idToken: credential,
         audience: process.env.GOOGLE_CLIENT_ID,
       });
       payload = ticket.getPayload();
     } catch (err) {
+
       // Fallback decode if GOOGLE_CLIENT_ID is not configured yet during dev testing
       const jwt = require('jsonwebtoken');
       payload = jwt.decode(credential);
