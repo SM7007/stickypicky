@@ -7,7 +7,7 @@ import { useSettings } from '../hooks/useSettings';
 import { formatPrice } from '../utils/formatPrice';
 import api from '../services/api';
 import toast from 'react-hot-toast';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck, MessageCircle } from 'lucide-react';
 
 const Checkout = () => {
   const { cartItems, subtotal, clearCart } = useCart();
@@ -27,6 +27,7 @@ const Checkout = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [waLoading, setWaLoading] = useState(false);
 
   // Autofill if user is logged in
   useEffect(() => {
@@ -158,6 +159,42 @@ const Checkout = () => {
     }
   };
 
+  // ── WhatsApp Order Handler ────────────────────────────────
+  const handleWhatsAppOrder = async (e) => {
+    e.preventDefault();
+
+    const { customerName, email, phone, address, city, state, pincode } = formData;
+    if (!customerName || !email || !phone || !address || !city || !state || !pincode) {
+      toast.error('Please fill all delivery details before ordering via WhatsApp');
+      return;
+    }
+
+    setWaLoading(true);
+    try {
+      const res = await api.post('/whatsapp/order', {
+        items: cartItems.map((item) => ({
+          productId: item.productId,
+          selectedSize: item.selectedSize,
+          quantity: item.quantity,
+        })),
+        ...formData,
+      });
+
+      const { waUrl } = res.data;
+      clearCart();
+      toast.success('Order logged! Opening WhatsApp...');
+      // Small delay so toast is visible before browser switches app
+      setTimeout(() => {
+        window.open(waUrl, '_blank');
+      }, 600);
+    } catch (err) {
+      console.error('WhatsApp order failed', err);
+      toast.error(err.response?.data?.message || 'Failed to create WhatsApp order.');
+    } finally {
+      setWaLoading(false);
+    }
+  };
+
   if (cartItems.length === 0) {
     return (
       <MainLayout>
@@ -264,14 +301,37 @@ const Checkout = () => {
               </div>
             </div>
 
-            <div className="pt-4">
+            <div className="pt-4 space-y-3">
+              {/* Primary: Pay online via Razorpay */}
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || waLoading}
                 className="w-full bg-primary text-background font-bold uppercase tracking-wider text-xs py-4 rounded hover:opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
               >
-                {loading ? 'Processing Payment...' : 'Pay Now'}
+                {loading ? 'Processing Payment...' : 'Pay Now (Online)'}
               </button>
+
+              {/* Divider */}
+              <div className="flex items-center gap-3">
+                <hr className="flex-1 border-border" />
+                <span className="text-[10px] text-secondary uppercase tracking-wider">or</span>
+                <hr className="flex-1 border-border" />
+              </div>
+
+              {/* Secondary: WhatsApp COD order */}
+              <button
+                type="button"
+                onClick={handleWhatsAppOrder}
+                disabled={loading || waLoading}
+                className="w-full font-bold uppercase tracking-wider text-xs py-4 rounded hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer text-white"
+                style={{ backgroundColor: '#25D366' }}
+              >
+                <MessageCircle className="h-4 w-4" />
+                {waLoading ? 'Opening WhatsApp...' : 'Order via WhatsApp (COD)'}
+              </button>
+              <p className="text-[10px] text-secondary text-center leading-relaxed">
+                Pay cash when your order arrives. We'll confirm your order on WhatsApp.
+              </p>
             </div>
           </form>
 

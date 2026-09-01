@@ -10,6 +10,7 @@ const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const paymentRoutes  = require('./routes/paymentRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
+const whatsappRoutes = require('./routes/whatsappRoutes');
 const { errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
@@ -45,6 +46,7 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/whatsapp', whatsappRoutes);
 
 // ── 404 Handler ──────────────────────────────────────────
 app.use((req, res) => {

@@ -141,6 +141,11 @@ const AdminOrders = () => {
                             year: 'numeric'
                           })}
                         </span>
+                        {order.orderType === 'WHATSAPP' && (
+                          <span className="inline-flex items-center gap-0.5 mt-1 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase bg-[#25D366]/10 text-[#128C5E] border border-[#25D366]/30">
+                            💬 WA · COD
+                          </span>
+                        )}
                       </td>
 
                       {/* Customer Info */}
@@ -216,6 +221,11 @@ const AdminOrders = () => {
                           year: 'numeric'
                         })}
                       </span>
+                      {order.orderType === 'WHATSAPP' && (
+                        <span className="inline-flex items-center gap-0.5 mt-1 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase bg-[#25D366]/10 text-[#128C5E] border border-[#25D366]/30">
+                          💬 WA · COD
+                        </span>
+                      )}
                     </div>
                     <button
                       onClick={() => setSelectedOrder(order)}

@@ -39,6 +39,11 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum OrderType {
+  ONLINE
+  WHATSAPP
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String
@@ -110,6 +115,7 @@ model Order {
   deliveryCharge Float         @default(0)
   paymentStatus  PaymentStatus @default(PENDING)
   orderStatus    OrderStatus   @default(PENDING)
+  orderType      OrderType     @default(ONLINE)
   customerName   String
   email          String
   phone          String
