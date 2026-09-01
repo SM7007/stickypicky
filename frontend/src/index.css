@@ -15,7 +15,7 @@
   --surface: #111111;
   --border: #1e1e1e;
   --text-primary: #ffffff;
-  --text-secondary: #888888;
+  --text-secondary: #94a3b8;
   --input-bg: #141414;
 }
 
@@ -23,9 +23,9 @@
 .light {
   --bg: #f8fafc;
   --surface: #ffffff;
-  --border: #e2e8f0;
+  --border: #cbd5e1;
   --text-primary: #0f172a;
-  --text-secondary: #64748b;
+  --text-secondary: #475569;
   --input-bg: #f1f5f9;
 }
 
