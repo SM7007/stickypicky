@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { SettingsProvider } from './context/SettingsContext';
@@ -16,6 +17,7 @@ import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailure from './pages/PaymentFailure';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
 import MyOrders from './pages/MyOrders';
 
 // Admin Pages
@@ -30,24 +32,29 @@ import AdminSettings from './pages/admin/AdminSettings';
 // Route guards
 import ProtectedRoute from './components/common/ProtectedRoute';
 
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || 'dummy_client_id.apps.googleusercontent.com';
+
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <SettingsProvider>
-        <CartProvider>
-          <Router>
-          <Routes>
-            {/* Customer Routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/products/:slug" element={<ProductDetail />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/payment-success" element={<PaymentSuccess />} />
-            <Route path="/payment-failure" element={<PaymentFailure />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <ThemeProvider>
+        <AuthProvider>
+          <SettingsProvider>
+          <CartProvider>
+            <Router>
+            <Routes>
+              {/* Customer Routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/products/:slug" element={<ProductDetail />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/payment-success" element={<PaymentSuccess />} />
+              <Route path="/payment-failure" element={<PaymentFailure />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+
             
             {/* Protected Customer Routes */}
             <Route
@@ -129,7 +136,9 @@ function App() {
         </SettingsProvider>
       </AuthProvider>
     </ThemeProvider>
+    </GoogleOAuthProvider>
   );
 }
+
 
 export default App;
