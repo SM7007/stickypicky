@@ -26,6 +26,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminAddProduct from './pages/admin/AdminAddProduct';
 import AdminEditProduct from './pages/admin/AdminEditProduct';
+import AdminCategories from './pages/admin/AdminCategories';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminSettings from './pages/admin/AdminSettings';
 
@@ -99,6 +100,14 @@ function App() {
               element={
                 <ProtectedRoute adminOnly>
                   <AdminEditProduct />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/categories"
+              element={
+                <ProtectedRoute adminOnly>
+                  <AdminCategories />
                 </ProtectedRoute>
               }
             />

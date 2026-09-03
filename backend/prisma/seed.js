@@ -30,6 +30,7 @@ async function main() {
     prisma.category.upsert({ where: { slug: 'sports' }, update: {}, create: { name: 'Sports', slug: 'sports' } }),
     prisma.category.upsert({ where: { slug: 'minimal' }, update: {}, create: { name: 'Minimal', slug: 'minimal' } }),
     prisma.category.upsert({ where: { slug: 'stickers' }, update: {}, create: { name: 'Stickers', slug: 'stickers' } }),
+    prisma.category.upsert({ where: { slug: 'polaroids' }, update: {}, create: { name: 'Polaroids', slug: 'polaroids' } }),
     prisma.category.upsert({ where: { slug: 'anime-stickers' }, update: {}, create: { name: 'Anime Stickers', slug: 'anime-stickers' } }),
   ]);
   console.log('✅ Categories created');

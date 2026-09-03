@@ -4,10 +4,16 @@ const { createError } = require('../middleware/errorMiddleware');
 // GET /api/categories
 const getCategories = async (req, res, next) => {
   try {
-    // Auto-ensure default Stickers category exists
-    const hasStickers = await prisma.category.findUnique({ where: { slug: 'stickers' } });
-    if (!hasStickers) {
-      await prisma.category.create({ data: { name: 'Stickers', slug: 'stickers' } });
+    // Auto-ensure default Stickers & Polaroids categories exist
+    const defaultCategories = [
+      { name: 'Stickers', slug: 'stickers' },
+      { name: 'Polaroids', slug: 'polaroids' },
+    ];
+    for (const cat of defaultCategories) {
+      const exists = await prisma.category.findUnique({ where: { slug: cat.slug } });
+      if (!exists) {
+        await prisma.category.create({ data: cat });
+      }
     }
 
     const categories = await prisma.category.findMany({

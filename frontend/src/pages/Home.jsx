@@ -33,6 +33,7 @@ const Home = () => {
   const categories = [
     { name: 'Anime', slug: 'anime', image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600' },
     { name: 'Stickers', slug: 'stickers', image: 'https://images.unsplash.com/photo-1572375992501-4b0892d50c69?w=600' },
+    { name: 'Polaroids', slug: 'polaroids', image: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=600' },
     { name: 'Bollywood', slug: 'bollywood', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600' },
     { name: 'Aesthetic', slug: 'aesthetic', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600' },
   ];
@@ -65,7 +66,7 @@ const Home = () => {
                 to="/shop?category=stickers"
                 className="border border-border text-primary font-semibold uppercase tracking-wider text-sm px-8 py-4 rounded hover:bg-surface transition-colors duration-200"
               >
-                Vinyl Stickers
+                Stickers
               </Link>
             </div>
           </div>
@@ -105,7 +106,7 @@ const Home = () => {
               <ShieldCheck className="h-6 w-6 text-primary" />
               <div>
                 <h4 className="text-sm font-bold uppercase tracking-wider text-primary">Premium Quality Guaranteed</h4>
-                <p className="text-xs text-secondary mt-1">Ultra-thick 300GSM matte paper, museum-grade print quality.</p>
+                <p className="text-xs text-secondary mt-1"> museum-grade print quality.</p>
               </div>
             </div>
             <div className="flex flex-col md:flex-row items-center gap-4 px-4">

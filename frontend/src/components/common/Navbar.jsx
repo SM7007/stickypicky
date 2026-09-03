@@ -44,13 +44,17 @@ const Navbar = () => {
               <Link to="/shop?category=stickers" className="text-sm font-medium text-secondary hover:text-primary transition-colors duration-200">
                 Stickers
               </Link>
+              <Link to="/shop?category=polaroids" className="text-sm font-medium text-secondary hover:text-primary transition-colors duration-200">
+                Polaroids
+              </Link>
               <div className="relative group">
                 <span className="text-sm font-medium text-secondary hover:text-primary cursor-pointer transition-colors duration-200">
                   Categories
                 </span>
                 <div className="absolute left-0 mt-2 w-48 bg-surface border border-border rounded-lg shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50 overflow-hidden">
                   <Link to="/shop" className="block px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-background transition-colors">All Products</Link>
-                  <Link to="/shop?category=stickers" className="block px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-background transition-colors">Vinyl Stickers</Link>
+                  <Link to="/shop?category=stickers" className="block px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-background transition-colors">Stickers</Link>
+                  <Link to="/shop?category=polaroids" className="block px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-background transition-colors">Polaroids</Link>
                   <Link to="/shop?category=anime" className="block px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-background transition-colors">Anime</Link>
                   <Link to="/shop?category=bollywood" className="block px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-background transition-colors">Bollywood</Link>
                   <Link to="/shop?category=aesthetic" className="block px-4 py-2.5 text-sm text-secondary hover:text-primary hover:bg-background transition-colors">Aesthetic</Link>
@@ -235,6 +239,13 @@ const Navbar = () => {
                 >
                   Stickers
                 </Link>
+                <Link
+                  to="/shop?category=polaroids"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-base font-semibold text-primary hover:text-secondary transition-colors py-1.5"
+                >
+                  Polaroids
+                </Link>
               </div>
             </div>
 
@@ -242,6 +253,7 @@ const Navbar = () => {
               <span className="text-[10px] font-bold text-secondary uppercase tracking-widest block mb-3">Categories</span>
               <div className="flex flex-col space-y-2 pl-2 border-l border-border">
                 <Link to="/shop?category=stickers" onClick={() => setMobileMenuOpen(false)} className="text-sm text-secondary hover:text-primary transition-colors py-1">Stickers</Link>
+                <Link to="/shop?category=polaroids" onClick={() => setMobileMenuOpen(false)} className="text-sm text-secondary hover:text-primary transition-colors py-1">Polaroids</Link>
                 <Link to="/shop?category=anime" onClick={() => setMobileMenuOpen(false)} className="text-sm text-secondary hover:text-primary transition-colors py-1">Anime</Link>
                 <Link to="/shop?category=bollywood" onClick={() => setMobileMenuOpen(false)} className="text-sm text-secondary hover:text-primary transition-colors py-1">Bollywood</Link>
                 <Link to="/shop?category=aesthetic" onClick={() => setMobileMenuOpen(false)} className="text-sm text-secondary hover:text-primary transition-colors py-1">Aesthetic</Link>

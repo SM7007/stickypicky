@@ -22,6 +22,33 @@ const Shop = () => {
   const inStockParam = searchParams.get('inStock') === 'true';
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [categories, setCategories] = useState([
+    { name: 'All Products', slug: '' },
+    { name: 'Stickers', slug: 'stickers' },
+    { name: 'Polaroids', slug: 'polaroids' },
+    { name: 'Anime', slug: 'anime' },
+    { name: 'Bollywood', slug: 'bollywood' },
+    { name: 'Aesthetic', slug: 'aesthetic' },
+    { name: 'Sports', slug: 'sports' },
+    { name: 'Minimal', slug: 'minimal' },
+  ]);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const res = await api.get('/categories');
+        if (res.data && res.data.length > 0) {
+          setCategories([
+            { name: 'All Products', slug: '' },
+            ...res.data.map(c => ({ name: c.name, slug: c.slug })),
+          ]);
+        }
+      } catch (err) {
+        console.error('Failed to load categories', err);
+      }
+    };
+    loadCategories();
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -60,16 +87,6 @@ const Shop = () => {
   const clearFilters = () => {
     setSearchParams(new URLSearchParams());
   };
-
-  const categories = [
-    { name: 'All Products', slug: '' },
-    { name: 'Stickers', slug: 'stickers' },
-    { name: 'Anime', slug: 'anime' },
-    { name: 'Bollywood', slug: 'bollywood' },
-    { name: 'Aesthetic', slug: 'aesthetic' },
-    { name: 'Sports', slug: 'sports' },
-    { name: 'Minimal', slug: 'minimal' },
-  ];
 
   return (
     <MainLayout>

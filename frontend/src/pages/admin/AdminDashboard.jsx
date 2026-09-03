@@ -65,6 +65,7 @@ const AdminDashboard = () => {
           <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Store Management Instructions</h3>
           <ul className="text-xs text-secondary space-y-2 list-disc list-inside leading-relaxed">
             <li>Go to <a href="/admin/products" className="text-primary hover:underline font-semibold">Products</a> to add, edit or delete posters and manage stocks.</li>
+            <li>Go to <a href="/admin/categories" className="text-primary hover:underline font-semibold">Categories</a> to add, edit or remove store categories (e.g. Polaroids, Anime, Stickers).</li>
             <li>Go to <a href="/admin/orders" className="text-white hover:underline font-semibold">Orders</a> to view details of customer purchases and confirm/ship products.</li>
             <li>Go to <a href="/admin/settings" className="text-primary hover:underline font-semibold">Delivery Settings</a> to configure delivery charges and free delivery threshold.</li>
             <li>Prices configured inside product size variants are matched dynamically during Razorpay verification checks.</li>
