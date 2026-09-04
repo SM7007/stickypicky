@@ -29,6 +29,14 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [waLoading, setWaLoading] = useState(false);
 
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (user === null) {
+      toast.error('Please login to continue with checkout');
+      navigate('/login?redirect=/checkout');
+    }
+  }, [user, navigate]);
+
   // Autofill if user is logged in
   useEffect(() => {
     if (user) {

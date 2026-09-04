@@ -4,7 +4,7 @@ import MainLayout from '../layouts/MainLayout';
 import { useCart } from '../hooks/useCart';
 import { useSettings } from '../hooks/useSettings';
 import { formatPrice } from '../utils/formatPrice';
-import { Trash2, Plus, Minus, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Trash2, Plus, Minus, ArrowLeft, ArrowRight, Truck } from 'lucide-react';
 
 const Cart = () => {
   const { cartItems, updateQuantity, removeFromCart, subtotal } = useCart();
@@ -118,10 +118,33 @@ const Cart = () => {
                   {deliveryCharge === 0 ? 'Free' : formatPrice(deliveryCharge)}
                 </span>
               </div>
-              {deliveryCharge > 0 && (
-                <p className="text-[10px] text-amber-500 font-medium">
-                  Add {formatPrice(settings.freeDeliveryAbove - subtotal)} more for free delivery.
-                </p>
+              {settings.freeDeliveryAbove > 0 && (
+                <div className="mt-1 space-y-2">
+                  {deliveryCharge === 0 ? (
+                    <div className="flex items-center gap-2 text-emerald-500 text-[11px] font-semibold">
+                      <Truck size={13} />
+                      <span>🎉 You've unlocked FREE delivery!</span>
+                    </div>
+                  ) : (
+                    <div>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="flex items-center gap-1.5 text-[10px] text-amber-500 font-semibold">
+                          <Truck size={11} />
+                          Add {formatPrice(settings.freeDeliveryAbove - subtotal)} more for FREE delivery
+                        </span>
+                        <span className="text-[10px] text-secondary">
+                          {Math.round((subtotal / settings.freeDeliveryAbove) * 100)}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-border rounded-full h-1.5 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-amber-400 to-amber-500 rounded-full transition-all duration-500"
+                          style={{ width: `${Math.min((subtotal / settings.freeDeliveryAbove) * 100, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
               <hr className="border-border" />
               <div className="flex justify-between text-base font-bold text-primary">

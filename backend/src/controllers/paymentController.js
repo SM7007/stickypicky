@@ -9,6 +9,76 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
+// ── Shared helper: build and save a real Order from validated data ──────────
+async function createOrderFromPending(pending, razorpayOrderId, razorpayPaymentId, razorpaySignature) {
+  const { cartData, customerData, subtotal, deliveryCharge, totalAmount, userId } = pending;
+
+  // Check for duplicate payment
+  const existingPayment = await prisma.payment.findFirst({
+    where: { razorpayPaymentId },
+  });
+  if (existingPayment) return null; // already processed
+
+  const order = await prisma.$transaction(async (tx) => {
+    const newOrder = await tx.order.create({
+      data: {
+        userId: userId || null,
+        totalAmount,
+        deliveryCharge,
+        paymentStatus: 'PAID',
+        orderStatus: 'CONFIRMED',
+        customerName: customerData.customerName,
+        email: customerData.email,
+        phone: customerData.phone,
+        address: customerData.address,
+        city: customerData.city,
+        state: customerData.state,
+        pincode: customerData.pincode,
+        items: {
+          create: cartData.map(i => ({
+            productId: i.productId,
+            productName: i.productName,
+            selectedSize: i.selectedSize,
+            quantity: i.quantity,
+            price: i.price,
+          })),
+        },
+        payment: {
+          create: {
+            razorpayOrderId,
+            razorpayPaymentId,
+            razorpaySignature: razorpaySignature || '',
+            amount: totalAmount,
+            status: 'PAID',
+          },
+        },
+      },
+      include: { items: true, payment: true },
+    });
+
+    // Decrement stock
+    for (const item of cartData) {
+      await tx.product.update({
+        where: { id: item.productId },
+        data: { stock: { decrement: item.quantity } },
+      });
+      if (item.selectedSize) {
+        await tx.productSize.updateMany({
+          where: { productId: item.productId, size: item.selectedSize },
+          data: { stock: { decrement: item.quantity } },
+        });
+      }
+    }
+
+    return newOrder;
+  });
+
+  // Clean up the PendingOrder
+  await prisma.pendingOrder.deleteMany({ where: { razorpayOrderId } });
+
+  return order;
+}
+
 // POST /api/payments/create-order
 const createPaymentOrder = async (req, res, next) => {
   try {
@@ -63,19 +133,27 @@ const createPaymentOrder = async (req, res, next) => {
       receipt: `rcpt_${Date.now()}`,
     });
 
-    // ── Temporarily store pending order data (we create DB order after payment verification) ──
-    // Store in a temp payment record linking razorpayOrderId to cart details
-    // The actual Order row is only created after verification
+    // ── Save PendingOrder (safety net for network failures) ──
+    await prisma.pendingOrder.create({
+      data: {
+        razorpayOrderId: razorpayOrder.id,
+        userId: req.user?.id || null,
+        cartData: validatedItems,
+        customerData: { customerName, email, phone, address, city, state, pincode },
+        subtotal,
+        deliveryCharge,
+        totalAmount,
+      },
+    });
+
     res.json({
       razorpayOrderId: razorpayOrder.id,
       amount: amountInPaise,
       currency: 'INR',
       keyId: process.env.RAZORPAY_KEY_ID,
-      // Send back validated totals for display
       subtotal,
       deliveryCharge,
       totalAmount,
-      // Echo back validated items (for frontend display only)
       items: validatedItems,
       customerInfo: { customerName, email, phone, address, city, state, pincode },
     });
@@ -91,14 +169,6 @@ const verifyPayment = async (req, res, next) => {
       razorpayOrderId,
       razorpayPaymentId,
       razorpaySignature,
-      items,
-      customerName,
-      email,
-      phone,
-      address,
-      city,
-      state,
-      pincode,
     } = req.body;
 
     // ── Verify signature ───────────────────────────────────
@@ -111,100 +181,34 @@ const verifyPayment = async (req, res, next) => {
       return next(createError('Payment verification failed: invalid signature', 400));
     }
 
-    // ── Recalculate total from DB one more time ────────────
-    let subtotal = 0;
-    const validatedItems = [];
-
-    for (const item of items) {
-      const product = await prisma.product.findUnique({
-        where: { id: item.productId, active: true },
-        include: { sizes: true },
-      });
-      if (!product) return next(createError(`Product not found: ${item.productId}`, 400));
-
-      let price = product.price;
-      if (item.selectedSize) {
-        const sizeData = product.sizes.find(s => s.size === item.selectedSize);
-        if (sizeData) price = sizeData.price;
-      }
-
-      validatedItems.push({
-        productId: product.id,
-        productName: product.name,
-        selectedSize: item.selectedSize || null,
-        quantity: item.quantity,
-        price,
-      });
-
-      subtotal += price * item.quantity;
-    }
-
-    const settings = await getOrCreateSettings();
-    const deliveryCharge = subtotal >= settings.freeDeliveryAbove ? 0 : settings.deliveryCharge;
-    const totalAmount = subtotal + deliveryCharge;
-
-    // ── Check for duplicate payment ────────────────────────
-    const existingPayment = await prisma.payment.findFirst({
-      where: { razorpayPaymentId },
+    // ── Load PendingOrder (has all cart + customer data) ───
+    const pending = await prisma.pendingOrder.findUnique({
+      where: { razorpayOrderId },
     });
-    if (existingPayment) {
-      return next(createError('Payment already processed', 400));
-    }
 
-    // ── Create Order + OrderItems + Payment in a transaction ─
-    const order = await prisma.$transaction(async (tx) => {
-      const newOrder = await tx.order.create({
-        data: {
-          userId: req.user?.id || null,
-          totalAmount,
-          deliveryCharge,
-          paymentStatus: 'PAID',
-          orderStatus: 'CONFIRMED',
-          customerName,
-          email,
-          phone,
-          address,
-          city,
-          state,
-          pincode,
-          items: {
-            create: validatedItems.map(i => ({
-              productId: i.productId,
-              productName: i.productName,
-              selectedSize: i.selectedSize,
-              quantity: i.quantity,
-              price: i.price,
-            })),
-          },
-          payment: {
-            create: {
-              razorpayOrderId,
-              razorpayPaymentId,
-              razorpaySignature,
-              amount: totalAmount,
-              status: 'PAID',
-            },
-          },
-        },
+    if (!pending) {
+      // PendingOrder might already have been processed by webhook — check real order
+      const existingOrder = await prisma.order.findFirst({
+        where: { payment: { razorpayOrderId } },
         include: { items: true, payment: true },
       });
-
-      // ── Decrement stock ──────────────────────────────────
-      for (const item of validatedItems) {
-        await tx.product.update({
-          where: { id: item.productId },
-          data: { stock: { decrement: item.quantity } },
-        });
-        if (item.selectedSize) {
-          await tx.productSize.updateMany({
-            where: { productId: item.productId, size: item.selectedSize },
-            data: { stock: { decrement: item.quantity } },
-          });
-        }
+      if (existingOrder) {
+        return res.json({ message: 'Payment successful! Order placed.', orderId: existingOrder.id, order: existingOrder });
       }
+      return next(createError('Pending order not found. Please contact support.', 404));
+    }
 
-      return newOrder;
-    });
+    // ── Create the real order using shared helper ──────────
+    const order = await createOrderFromPending(pending, razorpayOrderId, razorpayPaymentId, razorpaySignature);
+
+    if (!order) {
+      // Duplicate payment — already processed (possibly by webhook)
+      const existingOrder = await prisma.order.findFirst({
+        where: { payment: { razorpayPaymentId } },
+        include: { items: true, payment: true },
+      });
+      return res.json({ message: 'Payment successful! Order placed.', orderId: existingOrder?.id, order: existingOrder });
+    }
 
     res.json({
       message: 'Payment successful! Order placed.',
@@ -233,6 +237,24 @@ const handleWebhook = async (req, res, next) => {
 
     const event = JSON.parse(req.body.toString());
 
+    // ── order.paid: safety net for network failures ────────
+    if (event.event === 'order.paid') {
+      const razorpayOrderId  = event.payload.order.entity.id;
+      const razorpayPaymentId = event.payload.payment.entity.id;
+
+      const pending = await prisma.pendingOrder.findUnique({
+        where: { razorpayOrderId },
+      });
+
+      if (pending) {
+        // Frontend hasn't called /verify yet — create order now
+        await createOrderFromPending(pending, razorpayOrderId, razorpayPaymentId, '');
+        console.log(`[Webhook] order.paid — order created from pending: ${razorpayOrderId}`);
+      }
+      // If pending not found, /verify already handled it — do nothing
+    }
+
+    // ── payment.failed: mark existing order/payment as failed
     if (event.event === 'payment.failed') {
       const razorpayOrderId = event.payload.payment.entity.order_id;
       await prisma.payment.updateMany({
@@ -243,6 +265,8 @@ const handleWebhook = async (req, res, next) => {
         where: { payment: { razorpayOrderId } },
         data: { paymentStatus: 'FAILED' },
       });
+      // Also clean up any pending order
+      await prisma.pendingOrder.deleteMany({ where: { razorpayOrderId } });
     }
 
     res.json({ received: true });

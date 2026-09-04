@@ -163,3 +163,19 @@ model Payment {
 
   @@index([razorpayOrderId])
 }
+
+// Temporary store for cart + customer data between create-order and verify
+// Deleted once a real Order is created (either via /verify or webhook)
+model PendingOrder {
+  id              String   @id @default(cuid())
+  razorpayOrderId String   @unique
+  userId          String?
+  cartData        Json     // validated items array
+  customerData    Json     // name, email, phone, address, city, state, pincode
+  subtotal        Float
+  deliveryCharge  Float
+  totalAmount     Float
+  createdAt       DateTime @default(now())
+
+  @@index([razorpayOrderId])
+}
