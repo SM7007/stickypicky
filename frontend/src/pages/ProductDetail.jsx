@@ -4,7 +4,7 @@ import api from '../services/api';
 import MainLayout from '../layouts/MainLayout';
 import { useCart } from '../hooks/useCart';
 import { formatPrice } from '../utils/formatPrice';
-import { Plus, Minus, ShoppingBag, Truck, Undo, ShieldCheck } from 'lucide-react';
+import { Plus, Minus, ShoppingBag, Truck, ShieldCheck } from 'lucide-react';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorMessage from '../components/common/ErrorMessage';
 import { useSettings } from '../hooks/useSettings';
@@ -222,12 +222,9 @@ const ProductDetail = () => {
             </div>
 
             {/* Selling propositions */}
-            <div className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-border">
+            <div className="pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-border">
               <div className="flex items-center gap-2 text-xs text-secondary">
                 <Truck size={14} className="text-primary" /> Free Delivery &gt; ₹{settings.freeDeliveryAbove}
-              </div>
-              <div className="flex items-center gap-2 text-xs text-secondary">
-                <Undo size={14} className="text-primary" /> Easy 7-Day Returns
               </div>
               <div className="flex items-center gap-2 text-xs text-secondary">
                 <ShieldCheck size={14} className="text-primary" /> Secure Razorpay Checkout
