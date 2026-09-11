@@ -20,6 +20,7 @@ const Home = () => {
   const { settings } = useSettings();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [visibleCategoryCount, setVisibleCategoryCount] = useState(4);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -171,11 +172,11 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-            {categories.map((cat) => (
+            {categories.slice(0, visibleCategoryCount).map((cat) => (
               <Link
                 key={cat.slug}
                 to={`/shop?category=${cat.slug}`}
-                className="group relative aspect-[4/5] rounded-lg overflow-hidden border border-border bg-surface"
+                className="group relative aspect-[4/5] rounded-lg border border-border bg-surface overflow-hidden hover:border-primary/50 transition-all duration-300 shadow-sm hover:shadow-md"
               >
                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-300 z-10"></div>
                 <img
@@ -192,6 +193,17 @@ const Home = () => {
               </Link>
             ))}
           </div>
+
+          {categories.length > visibleCategoryCount && (
+            <div className="mt-10 text-center">
+              <button
+                onClick={() => setVisibleCategoryCount(prev => prev + 4)}
+                className="inline-flex items-center gap-2 border border-border bg-surface hover:bg-background px-8 py-3.5 rounded text-xs font-bold uppercase tracking-wider text-primary transition-all shadow-sm hover:border-primary/40 cursor-pointer"
+              >
+                See More Categories <ArrowRight size={14} />
+              </button>
+            </div>
+          )}
         </div>
       </section>
 

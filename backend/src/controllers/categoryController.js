@@ -29,7 +29,18 @@ const getCategories = async (req, res, next) => {
 // POST /api/categories
 const createCategory = async (req, res, next) => {
   try {
-    const { name, image } = req.body;
+    const { name } = req.body;
+    let image = req.body.image || null;
+
+    if (req.file) {
+      if (req.file.path) {
+        image = req.file.path;
+      } else if (req.file.buffer) {
+        image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+      }
+    }
+
+    if (!name) return next(createError('Category name is required', 400));
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     const existing = await prisma.category.findUnique({ where: { slug } });
     if (existing) return next(createError('Category already exists', 400));
@@ -45,13 +56,25 @@ const createCategory = async (req, res, next) => {
 // PUT /api/categories/:id
 const updateCategory = async (req, res, next) => {
   try {
-    const { name, image } = req.body;
+    const { name } = req.body;
+    let image = req.body.image;
+
+    if (req.file) {
+      if (req.file.path) {
+        image = req.file.path;
+      } else if (req.file.buffer) {
+        image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+      }
+    }
+
     const data = {};
     if (name !== undefined) {
       data.name = name;
       data.slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     }
-    if (image !== undefined) data.image = image || null;
+    if (image !== undefined || req.file) {
+      data.image = image || null;
+    }
     const category = await prisma.category.update({
       where: { id: req.params.id },
       data,
