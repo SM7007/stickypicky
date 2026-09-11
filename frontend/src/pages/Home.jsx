@@ -194,14 +194,24 @@ const Home = () => {
             ))}
           </div>
 
-          {categories.length > visibleCategoryCount && (
-            <div className="mt-10 text-center">
-              <button
-                onClick={() => setVisibleCategoryCount(prev => prev + 4)}
-                className="inline-flex items-center gap-2 border border-border bg-surface hover:bg-background px-8 py-3.5 rounded text-xs font-bold uppercase tracking-wider text-primary transition-all shadow-sm hover:border-primary/40 cursor-pointer"
-              >
-                See More Categories <ArrowRight size={14} />
-              </button>
+          {(categories.length > 4) && (
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              {categories.length > visibleCategoryCount && (
+                <button
+                  onClick={() => setVisibleCategoryCount(prev => prev + 4)}
+                  className="inline-flex items-center gap-2 border border-border bg-surface hover:bg-background px-8 py-3.5 rounded text-xs font-bold uppercase tracking-wider text-primary transition-all shadow-sm hover:border-primary/40 cursor-pointer"
+                >
+                  See More Categories <ArrowRight size={14} />
+                </button>
+              )}
+              {visibleCategoryCount > 4 && (
+                <button
+                  onClick={() => setVisibleCategoryCount(4)}
+                  className="inline-flex items-center gap-2 border border-border bg-surface hover:bg-background px-8 py-3.5 rounded text-xs font-bold uppercase tracking-wider text-secondary hover:text-primary transition-all shadow-sm hover:border-primary/40 cursor-pointer"
+                >
+                  See Less
+                </button>
+              )}
             </div>
           )}
         </div>
