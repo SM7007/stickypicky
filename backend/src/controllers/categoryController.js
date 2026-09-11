@@ -29,11 +29,13 @@ const getCategories = async (req, res, next) => {
 // POST /api/categories
 const createCategory = async (req, res, next) => {
   try {
-    const { name } = req.body;
+    const { name, image } = req.body;
     const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
     const existing = await prisma.category.findUnique({ where: { slug } });
     if (existing) return next(createError('Category already exists', 400));
-    const category = await prisma.category.create({ data: { name, slug } });
+    const category = await prisma.category.create({
+      data: { name, slug, image: image || null },
+    });
     res.status(201).json(category);
   } catch (err) {
     next(err);
@@ -43,11 +45,16 @@ const createCategory = async (req, res, next) => {
 // PUT /api/categories/:id
 const updateCategory = async (req, res, next) => {
   try {
-    const { name } = req.body;
-    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const { name, image } = req.body;
+    const data = {};
+    if (name !== undefined) {
+      data.name = name;
+      data.slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    }
+    if (image !== undefined) data.image = image || null;
     const category = await prisma.category.update({
       where: { id: req.params.id },
-      data: { name, slug },
+      data,
     });
     res.json(category);
   } catch (err) {

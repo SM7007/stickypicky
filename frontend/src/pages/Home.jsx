@@ -8,9 +8,18 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorMessage from '../components/common/ErrorMessage';
 import { useSettings } from '../hooks/useSettings';
 
+const CATEGORY_FALLBACKS = {
+  anime: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600',
+  stickers: 'https://images.unsplash.com/photo-1572375992501-4b0892d50c69?w=600',
+  polaroids: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=600',
+  bollywood: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600',
+  aesthetic: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600',
+};
+
 const Home = () => {
   const { settings } = useSettings();
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -35,13 +44,19 @@ const Home = () => {
     fetchFeatured();
   }, []);
 
-  const categories = [
-    { name: 'Anime', slug: 'anime', image: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600' },
-    { name: 'Stickers', slug: 'stickers', image: 'https://images.unsplash.com/photo-1572375992501-4b0892d50c69?w=600' },
-    { name: 'Polaroids', slug: 'polaroids', image: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=600' },
-    { name: 'Bollywood', slug: 'bollywood', image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600' },
-    { name: 'Aesthetic', slug: 'aesthetic', image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600' },
-  ];
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await api.get('/categories');
+        setCategories(res.data);
+      } catch (err) {
+        console.error('Failed to fetch categories', err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+
 
   return (
     <MainLayout>
@@ -54,11 +69,14 @@ const Home = () => {
               <Sparkles size={12} className="text-glow" /> FRESH POSTERS & STICKERS LIVE NOW
             </div>
             <h1 className="text-5xl sm:text-7xl font-bold tracking-tight leading-[1.1] font-display text-primary">
-              WALLS & TECH <br />
-              <span className="text-glow font-light italic">THAT SPEAK LOUDER</span>
+              POSTERS & STICKERS <br />
+              <span className="text-glow font-light italic">FOR NERDS LIKE YOU</span>
             </h1>
+            <p className="text-secondary text-lg sm:text-xl max-w-xl font-semibold leading-snug tracking-wide uppercase">
+              Stick it.&nbsp;&nbsp;Pick it.&nbsp;&nbsp;Love it.
+            </p>
             <p className="text-secondary text-base sm:text-lg max-w-xl font-normal leading-relaxed">
-              Premium physical posters & waterproof vinyl stickers. Exclusively conceptualized, designed, and printed on museum-grade materials. Delivered across India.
+              Anime, cinema & custom posters, stickers and Polaroids made for your walls, laptops, mobiles and everyday things.
             </p>
             <div className="pt-4 flex flex-wrap gap-4">
               <Link
@@ -110,8 +128,8 @@ const Home = () => {
             <div className="flex flex-col md:flex-row items-center gap-4 px-4 border-y md:border-y-0 md:border-x border-border py-6 md:py-0">
               <ShieldCheck className="h-6 w-6 text-primary" />
               <div>
-                <h4 className="text-sm font-bold uppercase tracking-wider text-primary">Premium Quality Guaranteed</h4>
-                <p className="text-xs text-secondary mt-1"> museum-grade print quality.</p>
+                <h4 className="text-sm font-bold uppercase tracking-wider text-primary">QUALITY YOU CAN TRUST</h4>
+                <p className="text-xs text-secondary mt-1"> </p>
               </div>
             </div>
             <div className="flex flex-col md:flex-row items-center gap-4 px-4">
@@ -161,7 +179,7 @@ const Home = () => {
               >
                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors duration-300 z-10"></div>
                 <img
-                  src={cat.image}
+                  src={cat.image || CATEGORY_FALLBACKS[cat.slug] || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600'}
                   alt={cat.name}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"

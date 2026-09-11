@@ -4,7 +4,7 @@ import AdminLayout from '../../layouts/AdminLayout';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorMessage from '../../components/common/ErrorMessage';
 import { toast } from 'react-hot-toast';
-import { Plus, Edit2, Trash2, Tag, Check, X } from 'lucide-react';
+import { Plus, Edit2, Trash2, Tag, Check, X, Image } from 'lucide-react';
 
 const AdminCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -13,11 +13,13 @@ const AdminCategories = () => {
 
   // New category form state
   const [newName, setNewName] = useState('');
+  const [newImage, setNewImage] = useState('');
   const [adding, setAdding] = useState(false);
 
   // Edit category state
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState('');
+  const [editImage, setEditImage] = useState('');
   const [savingEdit, setSavingEdit] = useState(false);
 
   const fetchCategories = async () => {
@@ -44,12 +46,15 @@ const AdminCategories = () => {
       toast.error('Please enter a category name');
       return;
     }
-
     try {
       setAdding(true);
-      const res = await api.post('/categories', { name: newName.trim() });
+      const res = await api.post('/categories', {
+        name: newName.trim(),
+        image: newImage.trim() || null,
+      });
       toast.success(`Category "${res.data.name}" created successfully!`);
       setNewName('');
+      setNewImage('');
       fetchCategories();
     } catch (err) {
       console.error('Failed to create category', err);
@@ -62,11 +67,13 @@ const AdminCategories = () => {
   const handleStartEdit = (category) => {
     setEditingId(category.id);
     setEditName(category.name);
+    setEditImage(category.image || '');
   };
 
   const handleCancelEdit = () => {
     setEditingId(null);
     setEditName('');
+    setEditImage('');
   };
 
   const handleSaveEdit = async (id) => {
@@ -74,10 +81,12 @@ const AdminCategories = () => {
       toast.error('Category name cannot be empty');
       return;
     }
-
     try {
       setSavingEdit(true);
-      const res = await api.put(`/categories/${id}`, { name: editName.trim() });
+      const res = await api.put(`/categories/${id}`, {
+        name: editName.trim(),
+        image: editImage.trim() || null,
+      });
       toast.success(`Category updated to "${res.data.name}"`);
       setEditingId(null);
       fetchCategories();
@@ -94,9 +103,7 @@ const AdminCategories = () => {
       toast.error(`Cannot delete "${name}". It has ${productCount} active products assigned.`);
       return;
     }
-
     if (!window.confirm(`Are you sure you want to delete the category "${name}"?`)) return;
-
     try {
       await api.delete(`/categories/${id}`);
       toast.success(`Category "${name}" deleted.`);
@@ -114,7 +121,7 @@ const AdminCategories = () => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h1 className="text-2xl font-bold font-display uppercase tracking-wider text-primary">Manage Categories</h1>
-            <p className="text-xs text-secondary mt-1">Create and manage storefront product categories</p>
+            <p className="text-xs text-secondary mt-1">Create and manage storefront product categories and their homepage images</p>
           </div>
         </div>
 
@@ -123,25 +130,48 @@ const AdminCategories = () => {
           <h2 className="text-sm font-bold uppercase tracking-wider text-primary flex items-center gap-2">
             <Plus size={16} className="text-glow" /> Add New Category
           </h2>
-          <form onSubmit={handleAddCategory} className="flex flex-col sm:flex-row gap-3">
-            <div className="flex-1">
+          <form onSubmit={handleAddCategory} className="space-y-3">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex-1">
+                <input
+                  type="text"
+                  placeholder="Category Name (e.g. Polaroids, Anime, Vintage)..."
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-primary focus:outline-none focus:border-primary transition-colors"
+                  disabled={adding}
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={adding}
+                className="bg-primary text-background font-bold uppercase tracking-wider text-xs px-6 py-2.5 rounded hover:opacity-90 transition-all flex items-center justify-center gap-2 shrink-0 disabled:opacity-50 cursor-pointer"
+              >
+                <Tag size={14} />
+                {adding ? 'Creating...' : 'Create Category'}
+              </button>
+            </div>
+
+            {/* Optional image URL for new category */}
+            <div className="flex items-center gap-3">
+              <Image size={13} className="text-secondary shrink-0" />
               <input
-                type="text"
-                placeholder="Category Name (e.g. Polaroids, Anime, Vintage)..."
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-                className="w-full bg-background border border-border rounded px-4 py-2.5 text-sm text-primary focus:outline-none focus:border-primary transition-colors"
+                type="url"
+                placeholder="Image URL for Popular Corners section (optional)"
+                value={newImage}
+                onChange={(e) => setNewImage(e.target.value)}
+                className="flex-1 bg-background border border-border rounded px-4 py-2 text-xs text-primary placeholder:text-secondary/50 focus:outline-none focus:border-primary transition-colors"
                 disabled={adding}
               />
+              {newImage && (
+                <img
+                  src={newImage}
+                  alt="preview"
+                  className="h-9 w-9 rounded object-cover border border-border shrink-0"
+                  onError={(e) => { e.target.style.display = 'none'; }}
+                />
+              )}
             </div>
-            <button
-              type="submit"
-              disabled={adding}
-              className="bg-primary text-background font-bold uppercase tracking-wider text-xs px-6 py-2.5 rounded hover:opacity-90 transition-all flex items-center justify-center gap-2 shrink-0 disabled:opacity-50"
-            >
-              <Tag size={14} />
-              {adding ? 'Creating...' : 'Create Category'}
-            </button>
           </form>
         </div>
 
@@ -160,8 +190,9 @@ const AdminCategories = () => {
               <table className="w-full text-left text-xs text-secondary">
                 <thead className="bg-background border-b border-border text-primary font-bold uppercase tracking-wider">
                   <tr>
-                    <th className="p-4">Category Name</th>
+                    <th className="p-4">Category</th>
                     <th className="p-4">URL Slug</th>
+                    <th className="p-4">Homepage Image</th>
                     <th className="p-4 text-center">Active Products</th>
                     <th className="p-4 text-right">Actions</th>
                   </tr>
@@ -180,7 +211,7 @@ const AdminCategories = () => {
                               type="text"
                               value={editName}
                               onChange={(e) => setEditName(e.target.value)}
-                              className="bg-background border border-border rounded px-3 py-1 text-xs text-primary focus:outline-none focus:border-primary"
+                              className="bg-background border border-border rounded px-3 py-1 text-xs text-primary focus:outline-none focus:border-primary w-36"
                               autoFocus
                             />
                           ) : (
@@ -196,10 +227,49 @@ const AdminCategories = () => {
                           /{cat.slug}
                         </td>
 
+                        {/* Image */}
+                        <td className="p-4">
+                          {isEditing ? (
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="url"
+                                value={editImage}
+                                onChange={(e) => setEditImage(e.target.value)}
+                                placeholder="https://..."
+                                className="bg-background border border-border rounded px-3 py-1 text-xs text-primary focus:outline-none focus:border-primary w-48 placeholder:text-secondary/50"
+                              />
+                              {editImage && (
+                                <img
+                                  src={editImage}
+                                  alt="preview"
+                                  className="h-8 w-8 rounded object-cover border border-border shrink-0"
+                                  onError={(e) => { e.target.style.display = 'none'; }}
+                                />
+                              )}
+                            </div>
+                          ) : cat.image ? (
+                            <div className="flex items-center gap-2">
+                              <img
+                                src={cat.image}
+                                alt={cat.name}
+                                className="h-10 w-10 rounded object-cover border border-border"
+                                onError={(e) => { e.target.style.display = 'none'; }}
+                              />
+                              <span className="text-[10px] text-secondary truncate max-w-[120px]" title={cat.image}>
+                                Custom image
+                              </span>
+                            </div>
+                          ) : (
+                            <span className="text-[10px] text-secondary/50 italic">No image set</span>
+                          )}
+                        </td>
+
                         {/* Product Count */}
                         <td className="p-4 text-center">
                           <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                            productCount > 0 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-surface border border-border text-secondary'
+                            productCount > 0
+                              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                              : 'bg-surface border border-border text-secondary'
                           }`}>
                             {productCount} {productCount === 1 ? 'Product' : 'Products'}
                           </span>
@@ -213,14 +283,14 @@ const AdminCategories = () => {
                                 onClick={() => handleSaveEdit(cat.id)}
                                 disabled={savingEdit}
                                 title="Save changes"
-                                className="p-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded hover:bg-emerald-500/30 transition-colors"
+                                className="p-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded hover:bg-emerald-500/30 transition-colors cursor-pointer"
                               >
                                 <Check size={14} />
                               </button>
                               <button
                                 onClick={handleCancelEdit}
                                 title="Cancel"
-                                className="p-1.5 bg-surface text-secondary border border-border rounded hover:text-primary transition-colors"
+                                className="p-1.5 bg-surface text-secondary border border-border rounded hover:text-primary transition-colors cursor-pointer"
                               >
                                 <X size={14} />
                               </button>
@@ -229,15 +299,15 @@ const AdminCategories = () => {
                             <div className="flex justify-end items-center gap-2">
                               <button
                                 onClick={() => handleStartEdit(cat)}
-                                title="Edit Name"
-                                className="p-1.5 bg-surface text-secondary border border-border rounded hover:text-primary transition-colors"
+                                title="Edit Category"
+                                className="p-1.5 bg-surface text-secondary border border-border rounded hover:text-primary transition-colors cursor-pointer"
                               >
                                 <Edit2 size={14} />
                               </button>
                               <button
                                 onClick={() => handleDeleteCategory(cat.id, cat.name, productCount)}
                                 title="Delete Category"
-                                className="p-1.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded hover:bg-red-500/20 transition-colors"
+                                className="p-1.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded hover:bg-red-500/20 transition-colors cursor-pointer"
                               >
                                 <Trash2 size={14} />
                               </button>
