@@ -19,6 +19,9 @@ model Settings {
   id                  String   @id @default("site_settings")
   deliveryCharge      Float    @default(49)
   freeDeliveryAbove   Float    @default(500)
+  heroImage1          String?  // Home page hero — Card 1 (top / front, most visible)
+  heroImage2          String?  // Home page hero — Card 2 (middle)
+  heroImage3          String?  // Home page hero — Card 3 (back)
   updatedAt           DateTime @updatedAt
 }
 

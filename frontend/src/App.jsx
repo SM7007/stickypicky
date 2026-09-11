@@ -29,6 +29,7 @@ import AdminEditProduct from './pages/admin/AdminEditProduct';
 import AdminCategories from './pages/admin/AdminCategories';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminSettings from './pages/admin/AdminSettings';
+import AdminHomepageImages from './pages/admin/AdminHomepageImages';
 
 // Route guards
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -124,6 +125,14 @@ function App() {
               element={
                 <ProtectedRoute adminOnly>
                   <AdminSettings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/homepage-images"
+              element={
+                <ProtectedRoute adminOnly>
+                  <AdminHomepageImages />
                 </ProtectedRoute>
               }
             />

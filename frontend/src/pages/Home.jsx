@@ -14,6 +14,11 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Hero poster images — fall back to Unsplash placeholders if admin hasn't set custom images
+  const heroImg1 = settings.heroImage1 || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600';
+  const heroImg2 = settings.heroImage2 || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600';
+  const heroImg3 = settings.heroImage3 || 'https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=600';
+
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
@@ -76,15 +81,15 @@ const Home = () => {
             <div className="relative w-72 sm:w-80 aspect-[3/4]">
               {/* Card 3 */}
               <div className="absolute inset-0 bg-surface rounded-lg border border-border overflow-hidden rotate-6 translate-x-12 translate-y-6 shadow-2xl scale-95 opacity-40">
-                <img src="https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=600" className="w-full h-full object-cover" alt="Anime Art" />
+                <img src={heroImg3} className="w-full h-full object-cover" alt="Anime Art" />
               </div>
               {/* Card 2 */}
               <div className="absolute inset-0 bg-surface rounded-lg border border-border overflow-hidden -rotate-6 -translate-x-8 translate-y-2 shadow-2xl scale-95 opacity-60">
-                <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600" className="w-full h-full object-cover" alt="Movie Poster" />
+                <img src={heroImg2} className="w-full h-full object-cover" alt="Movie Poster" />
               </div>
               {/* Card 1 (Top) */}
               <div className="absolute inset-0 bg-surface rounded-lg border border-border overflow-hidden shadow-2xl z-10 transition-transform duration-500 hover:scale-105">
-                <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600" className="w-full h-full object-cover" alt="Featured Poster" />
+                <img src={heroImg1} className="w-full h-full object-cover" alt="Featured Poster" />
               </div>
             </div>
           </div>

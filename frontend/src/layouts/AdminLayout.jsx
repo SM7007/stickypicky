@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../hooks/useTheme';
-import { LayoutDashboard, ShoppingBag, Tags, FolderHeart, LogOut, ArrowLeft, Menu, X, Settings, Sun, Moon } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Tags, FolderHeart, LogOut, ArrowLeft, Menu, X, Settings, Sun, Moon, Image } from 'lucide-react';
 
 const AdminLayout = ({ children }) => {
   const { logout } = useAuth();
@@ -21,6 +21,7 @@ const AdminLayout = ({ children }) => {
     { name: 'Products', path: '/admin/products', icon: ShoppingBag },
     { name: 'Categories', path: '/admin/categories', icon: Tags },
     { name: 'Orders', path: '/admin/orders', icon: FolderHeart },
+    { name: 'Homepage Images', path: '/admin/homepage-images', icon: Image },
     { name: 'Delivery Settings', path: '/admin/settings', icon: Settings },
   ];
 
