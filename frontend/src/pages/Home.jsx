@@ -100,15 +100,39 @@ const Home = () => {
             <div className="relative w-72 sm:w-80 aspect-[3/4]">
               {/* Card 3 */}
               <div className="absolute inset-0 bg-surface rounded-lg border border-border overflow-hidden rotate-6 translate-x-12 translate-y-6 shadow-2xl scale-95 opacity-40">
-                <img src={heroImg3} className="w-full h-full object-cover" alt="Anime Art" />
+                <img
+                  src={heroImg3}
+                  className="w-full h-full object-cover"
+                  alt="Hero Poster 3"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?w=600';
+                  }}
+                />
               </div>
               {/* Card 2 */}
               <div className="absolute inset-0 bg-surface rounded-lg border border-border overflow-hidden -rotate-6 -translate-x-8 translate-y-2 shadow-2xl scale-95 opacity-60">
-                <img src={heroImg2} className="w-full h-full object-cover" alt="Movie Poster" />
+                <img
+                  src={heroImg2}
+                  className="w-full h-full object-cover"
+                  alt="Hero Poster 2"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=600';
+                  }}
+                />
               </div>
               {/* Card 1 (Top) */}
               <div className="absolute inset-0 bg-surface rounded-lg border border-border overflow-hidden shadow-2xl z-10 transition-transform duration-500 hover:scale-105">
-                <img src={heroImg1} className="w-full h-full object-cover" alt="Featured Poster" />
+                <img
+                  src={heroImg1}
+                  className="w-full h-full object-cover"
+                  alt="Hero Poster 1"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600';
+                  }}
+                />
               </div>
             </div>
           </div>

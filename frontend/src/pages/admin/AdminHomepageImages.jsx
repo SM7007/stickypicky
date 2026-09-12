@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import api from '../../services/api';
 import AdminLayout from '../../layouts/AdminLayout';
 import { useSettings } from '../../hooks/useSettings';
@@ -39,10 +39,21 @@ export default function AdminHomepageImages() {
   const { settings, refetchSettings } = useSettings();
 
   const [images, setImages] = useState({
-    heroImage1: settings.heroImage1 || '',
-    heroImage2: settings.heroImage2 || '',
-    heroImage3: settings.heroImage3 || '',
+    heroImage1: settings?.heroImage1 || '',
+    heroImage2: settings?.heroImage2 || '',
+    heroImage3: settings?.heroImage3 || '',
   });
+
+  useEffect(() => {
+    if (settings) {
+      setImages({
+        heroImage1: settings.heroImage1 || '',
+        heroImage2: settings.heroImage2 || '',
+        heroImage3: settings.heroImage3 || '',
+      });
+    }
+  }, [settings?.heroImage1, settings?.heroImage2, settings?.heroImage3]);
+
 
   const [uploading, setUploading] = useState({
     heroImage1: false,
