@@ -56,20 +56,57 @@ export default function AdminHomepageImages() {
   const fileRef3 = useRef();
   const fileRefs = { heroImage1: fileRef1, heroImage2: fileRef2, heroImage3: fileRef3 };
 
-  const handleFileUpload = (key, file) => {
+  const compressImage = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const MAX_WIDTH = 1200;
+          const MAX_HEIGHT = 1600;
+          let { width, height } = img;
+
+          if (width > MAX_WIDTH || height > MAX_HEIGHT) {
+            if (width / height > MAX_WIDTH / MAX_HEIGHT) {
+              height = Math.round((height * MAX_WIDTH) / width);
+              width = MAX_WIDTH;
+            } else {
+              width = Math.round((width * MAX_HEIGHT) / height);
+              height = MAX_HEIGHT;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Return high quality JPEG Data URL
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+          resolve(dataUrl);
+        };
+        img.onerror = (err) => reject(err);
+        img.src = e.target.result;
+      };
+      reader.onerror = (err) => reject(err);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileUpload = async (key, file) => {
     if (!file) return;
     setUploading(u => ({ ...u, [key]: true }));
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImages(prev => ({ ...prev, [key]: reader.result }));
-      setUploading(u => ({ ...u, [key]: false }));
+    try {
+      const dataUrl = await compressImage(file);
+      setImages(prev => ({ ...prev, [key]: dataUrl }));
       toast.success('Image loaded — click Save to apply.');
-    };
-    reader.onerror = () => {
-      toast.error('Could not read the file.');
+    } catch (err) {
+      console.error('File read error', err);
+      toast.error('Could not process image file.');
+    } finally {
       setUploading(u => ({ ...u, [key]: false }));
-    };
-    reader.readAsDataURL(file);
+    }
   };
 
   const handleSave = async () => {

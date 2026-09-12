@@ -30,8 +30,8 @@ app.use(cors({
 // ── Body Parsers ─────────────────────────────────────────
 // Raw body needed for Razorpay webhook signature verification
 app.use('/api/payments/webhook', express.raw({ type: 'application/json' }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // ── Health Check ─────────────────────────────────────────
 app.get('/health', (req, res) => {
